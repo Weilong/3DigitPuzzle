@@ -1,8 +1,8 @@
-import java.io.*;
 import java.util.ArrayList;
 
 public class Node
 {
+	private Node parent;
 	private Number number;
 	private int h; //admissible heuristic value for this node
 	private ArrayList<Node> nodes = new ArrayList<Node>();
@@ -17,7 +17,10 @@ public class Node
 		this.number = number;
 		h = heuristic;
 	}
-	
+	public Node parent()
+	{
+		return parent;
+	}
 	public Number getNumber()
 	{
 		return number;
@@ -31,5 +34,10 @@ public class Node
 	public ArrayList<Node> getChildren()
 	{
 		return nodes;
+	}
+	
+	public void setParent(Node node)
+	{
+		parent = node;
 	}
 }

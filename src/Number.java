@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-
-
 public class Number
 {
 	public enum Digit{NONE, FIRST, SECOND, THIRD};
@@ -18,12 +16,12 @@ public class Number
 		lastChanged = Digit.NONE;
 	}
 	
-	public Number(int firstDigit,int secondDigit,int thirdDigit)
+	public Number(int firstDigit,int secondDigit,int thirdDigit,Digit lastChanged)
 	{
 		this.firstDigit = firstDigit;
 		this.secondDigit = secondDigit;
 		this.thirdDigit = thirdDigit;
-		lastChanged = Digit.NONE;
+		this.lastChanged = lastChanged;
 	}
 	
 	public boolean isForbidden(ArrayList<String> forbidden)
