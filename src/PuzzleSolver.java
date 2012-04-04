@@ -7,7 +7,7 @@ import java.util.Stack;
 
 public class PuzzleSolver
 {
-	public static final int SEARCHLIMIT =1000;	//set a limit of 1000 expanded nodes maximum
+	final int SEARCHLIMIT =1000;	//set a limit of 1000 expanded nodes maximum
 	
 	private Number start;
 	private Number goal;
@@ -27,9 +27,12 @@ public class PuzzleSolver
 			Scanner s = new Scanner(file);
 			start = new Number(s.nextLine());
 			goal = new Number(s.nextLine());
-			for (String number:s.nextLine().split(" "))
+			if (s.hasNextLine())
 			{
-				forbidden.add(number);
+				for (String number:s.nextLine().split(" "))
+				{
+					forbidden.add(number);
+				}
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -151,11 +154,13 @@ public class PuzzleSolver
 	public void DFS()
 	{
 		//TODO
+		
 	}
 	
 	public void IDS()
 	{
 		//TODO
+		
 	}
 	
 	public void Greedy()
@@ -173,7 +178,7 @@ public class PuzzleSolver
 		//TODO
 	}
 	
-	public void Heuristic(Number number)
+	public void Heuristic(Node node)
 	{
 		//TODO
 	}
@@ -182,10 +187,5 @@ public class PuzzleSolver
 	{
 		PuzzleSolver solver = new PuzzleSolver(args[0]);
 		solver.solve(args[1].charAt(0));
-		
-		//System.out.println(solver.start);
-		//System.out.println(solver.goal);
-		//System.out.println(solver.forbidden);
-		
 	}
 }
