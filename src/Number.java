@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Number
 {
 	public enum Digit{NONE, FIRST, SECOND, THIRD};
@@ -16,23 +14,22 @@ public class Number
 		lastChanged = Digit.NONE;
 	}
 	
-	public Number(int firstDigit,int secondDigit,int thirdDigit,Digit lastChanged)
+	public Number(Node node)
 	{
-		this.firstDigit = firstDigit;
-		this.secondDigit = secondDigit;
-		this.thirdDigit = thirdDigit;
-		this.lastChanged = lastChanged;
-	}
-	
-	public boolean isForbidden(ArrayList<String> forbidden)
-	{
-		//TODO
-		return false;
+		this.firstDigit = node.getNumber().firstDigit;
+		this.secondDigit = node.getNumber().secondDigit;
+		this.thirdDigit = node.getNumber().thirdDigit;
+		this.lastChanged = Digit.NONE;
 	}
 	
 	public Digit lastChanged()
 	{
 		return lastChanged;
+	}
+	
+	public void setLastChanged(Digit lastChanged)
+	{
+		this.lastChanged = lastChanged;
 	}
 	
 	public int firstDigit()
@@ -53,6 +50,36 @@ public class Number
 	public String Value()
 	{
 		return Integer.toString(firstDigit)+Integer.toString(secondDigit)+Integer.toString(thirdDigit); 
+	}
+	
+	public void firstDigitInc()
+	{
+		firstDigit+=1;
+	}
+	
+	public void firstDigitDec()
+	{
+		firstDigit-=1;
+	}
+	
+	public void secondDigitInc()
+	{
+		secondDigit+=1;
+	}
+	
+	public void secondDigitDec()
+	{
+		secondDigit-=1;
+	}
+	
+	public void thirdDigitInc()
+	{
+		thirdDigit+=1;
+	}
+	
+	public void thirdDigitDec()
+	{
+		thirdDigit-=1;
 	}
 	
 	public String toString()

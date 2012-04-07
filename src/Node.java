@@ -4,7 +4,7 @@ public class Node
 {
 	private Node parent;
 	private Number number;
-	private ArrayList<Node> nodes = new ArrayList<Node>();
+	private ArrayList<Node> children = new ArrayList<Node>();
 	
 	public Node(Number number)
 	{
@@ -22,7 +22,7 @@ public class Node
 	
 	public ArrayList<Node> getChildren()
 	{
-		return nodes;
+		return children;
 	}
 	
 	public void setParent(Node node)
