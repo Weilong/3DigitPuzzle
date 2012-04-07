@@ -12,8 +12,9 @@ public class PuzzleSolver
 	private Number start;
 	private Number goal;
 	private ArrayList<String> forbidden = new ArrayList<String>(); 
-	//private ArrayList<Node> fringe = new ArrayList<Node>();
-	//private ArrayList<Node> expanded = new ArrayList<Node>();
+	Queue<Node> fringe;
+	Queue<Node>	expanded;
+	Stack<String> path;
 	
 	public PuzzleSolver(String filename)
 	{
@@ -47,7 +48,13 @@ public class PuzzleSolver
 			BFS();
 			break;
 		case 'D':
-			DFS();
+			expanded = new LinkedList<Node>();
+			path = new Stack<String>();
+			SearchTree tree = new SearchTree(new Node(start));
+			DFS(tree.Root());
+			printPath();
+			System.out.println();
+			printExpanded();
 			break;
 		case 'I':
 			IDS();
@@ -68,17 +75,16 @@ public class PuzzleSolver
 	public void BFS()
 	{
 		//TODO
-		Queue<Node> fringe = new LinkedList<Node>();
-		Queue<Node>	expanded = new LinkedList<Node>();
+		fringe = new LinkedList<Node>();
+		expanded = new LinkedList<Node>();
+		path = new Stack<String>();
 		SearchTree tree = new SearchTree(new Node(start));
 		Node curr;
 		fringe.add(tree.Root());
 		while(fringe.size()!=0)
 		{
-			//System.out.println("running");
 			curr = fringe.peek();
 			expanded.add(fringe.remove());
-			//System.out.println(curr.getNumber().Value());
 			if (!curr.getNumber().Value().equals(goal.Value()))
 			{
 				if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
@@ -113,36 +119,24 @@ public class PuzzleSolver
 				{
 						node.setParent(curr);
 				}
-					fringe.addAll(curr.getChildren());
+				fringe.addAll(curr.getChildren());
+
 			}
 			else
 			{
-				Stack<String> path = new Stack<String>();
 				while(curr!=null)
 				{
 					path.push(curr.getNumber().Value());
 					curr = curr.parent();
 				}
-				
-				while (!path.isEmpty())
-				{
-					System.out.print(path.pop());
-					if (path.size()!=0)
-						System.out.print(",");
-				}
-									
+
+				printPath();
 				System.out.println();
-				
-				while(expanded.size()!=0)
-				{
-					System.out.print(expanded.remove().getNumber().Value());
-					if (expanded.size()!=0)
-						System.out.print(",");
-				}
+				printExpanded();
 				
 				return;
 			}
-			if (expanded.size()>SEARCHLIMIT)
+			if (expanded.size()==SEARCHLIMIT)
 			{
 				System.out.println("Goal not found");
 				return;
@@ -151,10 +145,109 @@ public class PuzzleSolver
 		
 	}
 	
-	public void DFS()
+	public boolean DFS(Node currNode)
 	{
 		//TODO
+		Number tmpNum;
+		expanded.add(currNode);
 		
+		if (!currNode.getNumber().Value().equals(goal.Value()))
+		{
+			if (currNode.getNumber().lastChanged()!=Number.Digit.FIRST)
+			{
+				if (currNode.getNumber().firstDigit()>0)
+				{
+					if (!forbidden.contains((tmpNum=new Number(currNode.getNumber().firstDigit()-1,currNode.getNumber().secondDigit(),currNode.getNumber().thirdDigit(),Number.Digit.FIRST)).Value()))
+					{	
+						currNode.getChildren().add(new Node(tmpNum));
+						if (DFS(currNode.getChildren().get(currNode.getChildren().size()-1)))
+						{
+							path.push(currNode.getNumber().Value());
+							return true;
+						}								
+					}//to get the newly added node of the children node list and check											
+				}
+				if (currNode.getNumber().firstDigit()<9)
+				{
+					if (!forbidden.contains((tmpNum=new Number(currNode.getNumber().firstDigit()+1,currNode.getNumber().secondDigit(),currNode.getNumber().thirdDigit(),Number.Digit.FIRST)).Value()))
+					{	
+						currNode.getChildren().add(new Node(tmpNum));
+						if (DFS(currNode.getChildren().get(currNode.getChildren().size()-1)))
+						{
+							path.push(currNode.getNumber().Value());
+							return true;
+						}	
+					}
+				}
+			}
+			if (currNode.getNumber().lastChanged()!=Number.Digit.SECOND)
+			{
+				if (currNode.getNumber().secondDigit()>0)
+				{
+					if (!forbidden.contains((tmpNum=new Number(currNode.getNumber().firstDigit(),currNode.getNumber().secondDigit()-1,currNode.getNumber().thirdDigit(),Number.Digit.SECOND)).Value()))
+					{	
+						currNode.getChildren().add(new Node(tmpNum));
+						if (DFS(currNode.getChildren().get(currNode.getChildren().size()-1)))
+						{
+							path.push(currNode.getNumber().Value());
+							return true;
+						}	
+					}
+				}
+				if (currNode.getNumber().secondDigit()<9)
+				{
+					if (!forbidden.contains((tmpNum=new Number(currNode.getNumber().firstDigit(),currNode.getNumber().secondDigit()+1,currNode.getNumber().thirdDigit(),Number.Digit.SECOND)).Value()))
+					{	
+						currNode.getChildren().add(new Node(tmpNum));
+						if (DFS(currNode.getChildren().get(currNode.getChildren().size()-1)))
+						{
+							path.push(currNode.getNumber().Value());
+							return true;
+						}	
+					}
+				}
+			}
+			if (currNode.getNumber().lastChanged()!=Number.Digit.THIRD)
+			{
+				if (currNode.getNumber().thirdDigit()>0)
+				{
+					if (!forbidden.contains((tmpNum=new Number(currNode.getNumber().firstDigit(),currNode.getNumber().secondDigit(),currNode.getNumber().thirdDigit()-1,Number.Digit.THIRD)).Value()))
+					{	
+						currNode.getChildren().add(new Node(tmpNum));
+						if (DFS(currNode.getChildren().get(currNode.getChildren().size()-1)))
+						{
+							path.push(currNode.getNumber().Value());
+							return true;
+						}	
+					}
+				}
+				if (currNode.getNumber().thirdDigit()<9)
+				{
+					if (!forbidden.contains((tmpNum=new Number(currNode.getNumber().firstDigit(),currNode.getNumber().secondDigit(),currNode.getNumber().thirdDigit()+1,Number.Digit.THIRD)).Value()))
+					{	
+						currNode.getChildren().add(new Node(tmpNum));
+						if (DFS(currNode.getChildren().get(currNode.getChildren().size()-1)))
+						{
+							path.push(currNode.getNumber().Value());
+							return true;
+						}	
+					}
+				}
+			}
+		}
+		else
+		{
+			path.push(currNode.getNumber().Value());
+			return true;
+		}
+			
+		if(expanded.size()==SEARCHLIMIT)
+		{
+			System.out.println("Goal not found");
+			return false;
+		}
+		
+		return false;
 	}
 	
 	public void IDS()
@@ -181,6 +274,35 @@ public class PuzzleSolver
 	public void Heuristic(Node node)
 	{
 		//TODO
+	}
+	
+	public void printPath()
+	{
+		while (!path.isEmpty())
+		{
+			System.out.print(path.pop());
+			if (path.size()!=0)
+				System.out.print(",");
+		}
+	}
+	
+	public void printExpanded()
+	{
+		while(expanded.size()!=0)
+		{
+			System.out.print(expanded.remove().getNumber().Value());
+			if (expanded.size()!=0)
+				System.out.print(",");
+		}
+	}
+	
+	public void checkSearchLimit()
+	{
+		if (expanded.size()==SEARCHLIMIT)
+		{
+			System.out.println("Goal not found");
+			return;
+		}
 	}
 	
 	public static void main(String[] args)

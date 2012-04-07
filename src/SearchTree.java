@@ -1,13 +1,11 @@
 public class SearchTree
 {
 	private Node root;
-	private Node curr;
 	private int height;
 	
 	public SearchTree(Node start)
 	{
 		root = start;
-		curr = root;
 		height = 0;
 	}
 	
@@ -16,23 +14,13 @@ public class SearchTree
 		return root;
 	}
 	
-	public Node getCurr()
+	public void incrementHeight()
 	{
-		return curr;
+		height +=1; 
 	}
 	
-	public void setCurr(Node node)
-	{
-		curr = node;
-	}
-	
-	public int getHeight()
+	public int Height()
 	{
 		return height;
-	}
-	
-	public void addNode(Node child)
-	{
-		curr.getChildren().add(child);
 	}
 }
