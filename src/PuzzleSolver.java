@@ -91,10 +91,24 @@ public class PuzzleSolver
 				System.out.println("Goal not found");
 			break;
 		case 'A':
-			AStar();
+			if(AStar(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();
+			}
+			else
+				System.out.println("Goal not found");
 			break;
 		case 'H':
-			HillClimbing();
+			if(HillClimbing(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();
+			}
+			else
+				System.out.println("Goal not found");
 			break;
 		default:
 		}
@@ -349,7 +363,6 @@ public class PuzzleSolver
 		boolean result = false;
 		for (int limit=0;limit<Double.POSITIVE_INFINITY;limit++)
 		{
-			expanded.clear();
 			result = DLS(node,limit);
 			if (result)
 				return result;
@@ -608,14 +621,244 @@ public class PuzzleSolver
 		return false;
 	}
 	
-	public void AStar()
+	public boolean AStar(Node node)
 	{
 		//TODO
+		Number tmpNum;
+		Node tmpNode;
+		Node curr;
+		Node minF = node;
+		int depth = 0;
+	
+		while(expanded.size()!=SEARCHLIMIT)
+		{
+			curr = minF;
+			expanded.add(curr);
+
+			if (curr.getNumber().Value().equals(goal.Value()))
+			{
+				while(curr!=null)
+				{
+					path.push(curr.getNumber().Value());
+					curr = curr.parent();
+				}		
+				return true;
+			}
+					
+			if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
+			{
+				if (curr.getNumber().firstDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.firstDigitDec();
+					tmpNum.setLastChanged(Number.Digit.FIRST);
+					if (!forbidden.contains(tmpNum.Value()))
+					{
+						tmpNode = new Node(tmpNum);
+						tmpNode.setParent(curr);
+						curr.getChildren().add(tmpNode);
+					}
+				}
+				if (curr.getNumber().firstDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.firstDigitInc();
+					tmpNum.setLastChanged(Number.Digit.FIRST);
+					if (!forbidden.contains(tmpNum.Value()))
+					{
+						tmpNode = new Node(tmpNum);
+						tmpNode.setParent(curr);
+						curr.getChildren().add(tmpNode);
+					}
+				}
+			}
+			if (curr.getNumber().lastChanged()!=Number.Digit.SECOND)
+			{
+				if (curr.getNumber().secondDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.secondDigitDec();
+					tmpNum.setLastChanged(Number.Digit.SECOND);
+					if (!forbidden.contains(tmpNum.Value()))
+					{
+						tmpNode = new Node(tmpNum);
+						tmpNode.setParent(curr);
+						curr.getChildren().add(tmpNode);
+					}
+				}
+				if (curr.getNumber().secondDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.secondDigitInc();
+					tmpNum.setLastChanged(Number.Digit.SECOND);
+					if (!forbidden.contains(tmpNum.Value()))
+					{
+						tmpNode = new Node(tmpNum);
+						tmpNode.setParent(curr);
+						curr.getChildren().add(tmpNode);
+					}
+				}
+			}
+			if (curr.getNumber().lastChanged()!=Number.Digit.THIRD)
+			{
+				if (curr.getNumber().thirdDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.thirdDigitDec();
+					tmpNum.setLastChanged(Number.Digit.THIRD);
+					if (!forbidden.contains(tmpNum.Value()))
+					{
+						tmpNode = new Node(tmpNum);
+						tmpNode.setParent(curr);
+						curr.getChildren().add(tmpNode);
+					}
+				}
+				if (curr.getNumber().thirdDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.thirdDigitInc();
+					tmpNum.setLastChanged(Number.Digit.THIRD);
+					if (!forbidden.contains(tmpNum.Value()))
+					{
+						tmpNode = new Node(tmpNum);
+						tmpNode.setParent(curr);
+						curr.getChildren().add(tmpNode);
+					}
+				}
+			}
+			minF = curr.getChildren().get(0);
+			for (Node n:curr.getChildren())
+			{
+				if (Heuristic(n)<Heuristic(minF))
+					minF = n;
+			}
+		}
+		return false;
 	}
 	
-	public void HillClimbing()
+	public boolean HillClimbing(Node node)
 	{
 		//TODO
+		Number tmpNum;
+		Node curr;
+		Node neighbour = null;
+		
+		curr = node;
+		
+		while(expanded.size()!=SEARCHLIMIT)
+		{
+			expanded.add(curr);
+			path.push(curr.getNumber().Value());
+			if (curr.getNumber().Value().equals(goal.Value()))	
+				return true;
+					
+			if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
+			{
+				if (curr.getNumber().firstDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.firstDigitDec();
+					tmpNum.setLastChanged(Number.Digit.FIRST);
+					
+					if (!forbidden.contains(tmpNum.Value()))
+					{	
+						neighbour = new Node(tmpNum);
+						if (Heuristic(neighbour)>=Heuristic(curr))
+								return true;
+						else
+							curr = neighbour;
+					}
+				}
+				if (curr.getNumber().firstDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.firstDigitInc();
+					tmpNum.setLastChanged(Number.Digit.FIRST);
+					
+					if (!forbidden.contains(tmpNum.Value()))
+					{	
+						neighbour = new Node(tmpNum);
+						if (Heuristic(neighbour)>=Heuristic(curr))
+								return true;
+						else
+							curr = neighbour;
+					}
+				}
+			}
+			if (curr.getNumber().lastChanged()!=Number.Digit.SECOND)
+			{
+				if (curr.getNumber().secondDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.secondDigitDec();
+					tmpNum.setLastChanged(Number.Digit.SECOND);
+					
+					if (!forbidden.contains(tmpNum.Value()))
+					{	
+						neighbour = new Node(tmpNum);
+						if (Heuristic(neighbour)>=Heuristic(curr))
+								return true;
+						else
+							curr = neighbour;
+					}
+				}
+				if (curr.getNumber().secondDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.secondDigitInc();
+					tmpNum.setLastChanged(Number.Digit.SECOND);
+					
+					if (!forbidden.contains(tmpNum.Value()))
+					{	
+						neighbour = new Node(tmpNum);
+						if (Heuristic(neighbour)>=Heuristic(curr))
+								return true;
+						else
+							curr = neighbour;
+					}
+				}
+			}
+			if (curr.getNumber().lastChanged()!=Number.Digit.THIRD)
+			{
+				if (curr.getNumber().thirdDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.thirdDigitDec();
+					tmpNum.setLastChanged(Number.Digit.THIRD);
+					
+					if (!forbidden.contains(tmpNum.Value()))
+					{	
+						neighbour = new Node(tmpNum);
+						if (Heuristic(neighbour)>=Heuristic(curr))
+								return true;
+						else
+							curr = neighbour;
+					}
+				}
+				if (curr.getNumber().thirdDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.thirdDigitInc();
+					tmpNum.setLastChanged(Number.Digit.THIRD);
+					
+					if (!forbidden.contains(tmpNum.Value()))
+					{
+						neighbour = new Node(tmpNum);
+						if (Heuristic(neighbour)>=Heuristic(curr))
+								return true;
+						else
+							curr = neighbour;
+					}				
+				}
+			}
+			//check if current node has been replaced by a new node or not
+			//if not it means the searching cannot go any further, stop
+			//searching
+			if (curr.equals(curr))
+				return true;
+		}
+		
+		return false;
 	}
 	/**
 	 * Devise a heuristic for each node.
