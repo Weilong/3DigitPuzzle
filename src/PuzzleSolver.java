@@ -76,7 +76,19 @@ public class PuzzleSolver
 				System.out.println("Goal not found");
 			break;
 		case 'I':
-			IDS();
+			fringe = new LinkedList<Node>();
+			expanded = new LinkedList<Node>();
+			path = new Stack<String>();
+			tree = new SearchTree(new Node(start));
+			
+			if(IDS(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();
+			}
+			else
+				System.out.println("Goal not found");
 			break;
 		case 'G':
 			Greedy();
@@ -99,82 +111,13 @@ public class PuzzleSolver
 		fringe.add(node);
 		while(fringe.size()!=0)
 		{
+			if (expanded.size()==SEARCHLIMIT)
+				return false;
+			
 			curr = fringe.remove();
 			expanded.add(curr);
-			if (!curr.getNumber().Value().equals(goal.Value()))
-			{
-				if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
-				{
-					if (curr.getNumber().firstDigit()>0)
-					{
-						tmpNum = new Number(curr);
-						tmpNum.firstDigitDec();
-						tmpNum.setLastChanged(Number.Digit.FIRST);
-						tmpNode = new Node(tmpNum);
-						tmpNode.setParent(curr);
-						curr.getChildren().add(tmpNode);
-					}
-					if (curr.getNumber().firstDigit()<9)
-					{
-						tmpNum = new Number(curr);
-						tmpNum.firstDigitInc();
-						tmpNum.setLastChanged(Number.Digit.FIRST);
-						tmpNode = new Node(tmpNum);
-						tmpNode.setParent(curr);
-						curr.getChildren().add(tmpNode);
-					}
-				}
-				if (curr.getNumber().lastChanged()!=Number.Digit.SECOND)
-				{
-					if (curr.getNumber().secondDigit()>0)
-					{
-						tmpNum = new Number(curr);
-						tmpNum.secondDigitDec();
-						tmpNum.setLastChanged(Number.Digit.SECOND);
-						tmpNode = new Node(tmpNum);
-						tmpNode.setParent(curr);
-						curr.getChildren().add(tmpNode);
-					}
-					if (curr.getNumber().secondDigit()<9)
-					{
-						tmpNum = new Number(curr);
-						tmpNum.secondDigitInc();
-						tmpNum.setLastChanged(Number.Digit.SECOND);
-						tmpNode = new Node(tmpNum);
-						tmpNode.setParent(curr);
-						curr.getChildren().add(tmpNode);
-					}
-				}
-				if (curr.getNumber().lastChanged()!=Number.Digit.THIRD)
-				{
-					if (curr.getNumber().thirdDigit()>0)
-					{
-						tmpNum = new Number(curr);
-						tmpNum.thirdDigitDec();
-						tmpNum.setLastChanged(Number.Digit.THIRD);
-						tmpNode = new Node(tmpNum);
-						tmpNode.setParent(curr);
-						curr.getChildren().add(tmpNode);
-					}
-					if (curr.getNumber().thirdDigit()<9)
-					{
-						tmpNum = new Number(curr);
-						tmpNum.thirdDigitInc();
-						tmpNum.setLastChanged(Number.Digit.THIRD);
-						tmpNode = new Node(tmpNum);
-						tmpNode.setParent(curr);
-						curr.getChildren().add(tmpNode);
-					}
-				}
-				//remove all forbidden numbers from the children list of a node
-				for (int i=0;i<curr.getChildren().size();i++)
-				{
-					if (forbidden.contains(curr.getChildren().get(i).getNumber().Value()))
-						curr.getChildren().remove(i);
-				}
-				fringe.addAll(curr.getChildren());
-			}
-			else
+
+			if (curr.getNumber().Value().equals(goal.Value()))
 			{
 				while(curr!=null)
 				{
@@ -183,11 +126,79 @@ public class PuzzleSolver
 				}		
 				return true;
 			}
-			
-			if (expanded.size()==SEARCHLIMIT)
-				return false;
+					
+			if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
+			{
+				if (curr.getNumber().firstDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.firstDigitDec();
+					tmpNum.setLastChanged(Number.Digit.FIRST);
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+				}
+				if (curr.getNumber().firstDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.firstDigitInc();
+					tmpNum.setLastChanged(Number.Digit.FIRST);
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+				}
+			}
+			if (curr.getNumber().lastChanged()!=Number.Digit.SECOND)
+			{
+				if (curr.getNumber().secondDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.secondDigitDec();
+					tmpNum.setLastChanged(Number.Digit.SECOND);
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+				}
+				if (curr.getNumber().secondDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.secondDigitInc();
+					tmpNum.setLastChanged(Number.Digit.SECOND);
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+				}
+			}
+			if (curr.getNumber().lastChanged()!=Number.Digit.THIRD)
+			{
+				if (curr.getNumber().thirdDigit()>0)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.thirdDigitDec();
+					tmpNum.setLastChanged(Number.Digit.THIRD);
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+				}
+				if (curr.getNumber().thirdDigit()<9)
+				{
+					tmpNum = new Number(curr);
+					tmpNum.thirdDigitInc();
+					tmpNum.setLastChanged(Number.Digit.THIRD);
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+				}
+			}
+			//remove all forbidden numbers from the children list of a node
+			for (int i=0;i<curr.getChildren().size();i++)
+			{
+				if (forbidden.contains(curr.getChildren().get(i).getNumber().Value()))
+					curr.getChildren().remove(i);
+			}
+			fringe.addAll(curr.getChildren());
 		}
-		return true;
+		return false;
 	}
 	
 	public boolean DFS(Node node)
@@ -196,15 +207,170 @@ public class PuzzleSolver
 		if(expanded.size()==SEARCHLIMIT)
 			return false;
 		
-		Number tmpNum;//System.out.println(node.getNumber().Value());System.out.println(expanded.size());
+		Number tmpNum;
 		Node tmpNode;
 		Node curr;
 		
 		curr = node;
 		expanded.add(curr);
 		
-		if (!curr.getNumber().Value().equals(goal.Value()))
+		if (curr.getNumber().Value().equals(goal.Value()))
 		{
+			path.push(curr.getNumber().Value());
+			return true;
+		}	
+				
+		if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
+		{
+			if (curr.getNumber().firstDigit()>0)
+			{
+				tmpNum = new Number(curr);
+				tmpNum.firstDigitDec();
+				tmpNum.setLastChanged(Number.Digit.FIRST);
+				if (!forbidden.contains(tmpNum.Value()))
+				{	
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+					if (DFS(tmpNode))
+					{
+						path.push(curr.getNumber().Value());
+						return true;
+					}							
+				}//to get the newly added node of the children node list and check											
+			}
+			if (curr.getNumber().firstDigit()<9)
+			{
+				tmpNum = new Number(curr);
+				tmpNum.firstDigitInc();
+				tmpNum.setLastChanged(Number.Digit.FIRST);
+				if (!forbidden.contains(tmpNum.Value()))
+				{	
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+					if (DFS(tmpNode))
+					{
+						path.push(curr.getNumber().Value());
+						return true;
+					}	
+				}
+			}
+		}
+		if (curr.getNumber().lastChanged()!=Number.Digit.SECOND)
+		{
+			if (curr.getNumber().secondDigit()>0)
+			{
+				tmpNum = new Number(curr);
+				tmpNum.secondDigitDec();
+				tmpNum.setLastChanged(Number.Digit.SECOND);
+				if (!forbidden.contains(tmpNum.Value()))
+				{	
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+					if (DFS(tmpNode))
+					{
+						path.push(curr.getNumber().Value());
+						return true;
+					}
+				}
+			}
+			if (curr.getNumber().secondDigit()<9)
+			{
+				tmpNum = new Number(curr);
+				tmpNum.secondDigitInc();
+				tmpNum.setLastChanged(Number.Digit.SECOND);
+				if (!forbidden.contains(tmpNum.Value()))
+				{	
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+					if (DFS(tmpNode))
+					{
+						path.push(curr.getNumber().Value());
+						return true;
+					}
+				}
+			}
+		}
+		if (curr.getNumber().lastChanged()!=Number.Digit.THIRD)
+		{
+			if (curr.getNumber().thirdDigit()>0)
+			{
+				tmpNum = new Number(curr);
+				tmpNum.thirdDigitDec();
+				tmpNum.setLastChanged(Number.Digit.THIRD);
+				if (!forbidden.contains(tmpNum.Value()))
+				{	
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+					if (DFS(tmpNode))
+					{
+						path.push(curr.getNumber().Value());
+						return true;
+					}	
+				}
+			}
+			if (curr.getNumber().thirdDigit()<9)
+			{
+				tmpNum = new Number(curr);
+				tmpNum.thirdDigitInc();
+				tmpNum.setLastChanged(Number.Digit.THIRD);
+				if (!forbidden.contains(tmpNum.Value()))
+				{	
+					tmpNode = new Node(tmpNum);
+					tmpNode.setParent(curr);
+					curr.getChildren().add(tmpNode);
+					if (DFS(tmpNode))
+					{
+						path.push(curr.getNumber().Value());
+						return true;
+					}	
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean IDS(Node node)
+	{
+		//TODO
+		boolean result = false;
+		for (int limit=0;limit<Double.POSITIVE_INFINITY;limit++)
+		{
+			expanded.clear();
+			result = DLS(node,limit);
+			if (result)
+				return result;
+			
+			if (expanded.size()==SEARCHLIMIT)
+				return result;
+		}
+		return result;
+	}
+	
+	public boolean DLS(Node node,int depth)
+	{
+		if (depth>=0)
+		{
+			if(expanded.size()==SEARCHLIMIT)
+				return false;
+			
+			Number tmpNum;
+			Node tmpNode;
+			Node curr;
+			
+			curr = node;
+			expanded.add(curr);
+			
+			if (curr.getNumber().Value().equals(goal.Value()))
+			{
+				path.push(curr.getNumber().Value());
+				return true;
+			}	
+					
 			if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
 			{
 				if (curr.getNumber().firstDigit()>0)
@@ -217,7 +383,7 @@ public class PuzzleSolver
 						tmpNode = new Node(tmpNum);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
-						if (DFS(tmpNode))
+						if (DLS(tmpNode,depth-1))
 						{
 							path.push(curr.getNumber().Value());
 							return true;
@@ -234,7 +400,7 @@ public class PuzzleSolver
 						tmpNode = new Node(tmpNum);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
-						if (DFS(tmpNode))
+						if (DLS(tmpNode,depth-1))
 						{
 							path.push(curr.getNumber().Value());
 							return true;
@@ -254,7 +420,7 @@ public class PuzzleSolver
 						tmpNode = new Node(tmpNum);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
-						if (DFS(tmpNode))
+						if (DLS(tmpNode,depth-1))
 						{
 							path.push(curr.getNumber().Value());
 							return true;
@@ -271,7 +437,7 @@ public class PuzzleSolver
 						tmpNode = new Node(tmpNum);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
-						if (DFS(tmpNode))
+						if (DLS(tmpNode,depth-1))
 						{
 							path.push(curr.getNumber().Value());
 							return true;
@@ -291,7 +457,7 @@ public class PuzzleSolver
 						tmpNode = new Node(tmpNum);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
-						if (DFS(tmpNode))
+						if (DLS(tmpNode,depth-1))
 						{
 							path.push(curr.getNumber().Value());
 							return true;
@@ -308,7 +474,7 @@ public class PuzzleSolver
 						tmpNode = new Node(tmpNum);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
-						if (DFS(tmpNode))
+						if (DLS(tmpNode,depth-1))
 						{
 							path.push(curr.getNumber().Value());
 							return true;
@@ -317,19 +483,7 @@ public class PuzzleSolver
 				}
 			}
 		}
-		else
-		{
-			path.push(curr.getNumber().Value());
-			return true;
-		}		
-		
 		return false;
-	}
-	
-	public void IDS()
-	{
-		//TODO
-		
 	}
 	
 	public void Greedy()

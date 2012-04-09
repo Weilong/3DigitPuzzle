@@ -14,7 +14,7 @@ public class SearchTree
 		return root;
 	}
 	
-	public void incrementHeight()
+	public void incHeight()
 	{
 		height +=1; 
 	}
