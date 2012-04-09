@@ -116,7 +116,7 @@ public class PuzzleSolver
 			
 			curr = fringe.remove();
 			expanded.add(curr);
-
+			System.out.println(Heuristic(curr));
 			if (curr.getNumber().Value().equals(goal.Value()))
 			{
 				while(curr!=null)
@@ -489,6 +489,7 @@ public class PuzzleSolver
 	public void Greedy()
 	{
 		//TODO
+		
 	}
 	
 	public void AStar()
@@ -500,10 +501,42 @@ public class PuzzleSolver
 	{
 		//TODO
 	}
-	
-	public void Heuristic(Node node)
+	/**
+	 * Devise a heuristic for each node.
+	 * calculate the differences of each digit between the current node and goal node
+	 * sum them up and add the difference between the largest difference and the second
+	 * largest difference from above. 
+	 * this heuristic is admissible because:
+	 * 1) if all digits can be altered freely, the number of total movements should be the sum
+	 * of differences between each digit of current node and goal.
+	 * 2) but same digit cannot be altered in two successive moves, therefore in certain cases
+	 * we need to "sacrifice" another digit to change a digit which is an "useless" move. Eg:
+	 * if we want to transform 112 to 111 but the third digit has been changed, we need to change
+	 * the first digit or the second digit first, say, 122, and then 121, 111, totally 3 steps.
+	 * if we can change digits freely, only 1 step needed.
+	 * 3)in the h formulation, the front part (firstDigitDiff + secondDigitDiff + thirdDigitDiff)
+	 * calculate the steps needed for condition 1 and the latter part calculated difference between 
+	 * the largest difference and the second largest difference from above which is the least "useless"
+	 * step we need.
+	 * 4) so far the heuristic is admissible and another constraint for the puzzle is the forbidden numbers
+	 * which make the heuristic even more admissible because we need more steps to "detour" the forbidden
+	 * numbers.
+	 * @param node
+	 * @return
+	 */
+	public int Heuristic(Node node)
 	{
 		//TODO
+		int h;
+		int firstDigitDiff=Math.abs(node.getNumber().firstDigit()-goal.firstDigit()),
+			secondDigitDiff=Math.abs(node.getNumber().secondDigit()-goal.secondDigit()),
+			thirdDigitDiff=Math.abs(node.getNumber().thirdDigit()-goal.thirdDigit());
+		
+		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff + 
+			Math.max(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff)) -
+			Math.min(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff));
+		
+		return h;
 	}
 	
 	public void printPath()
