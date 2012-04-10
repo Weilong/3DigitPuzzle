@@ -17,6 +17,14 @@ public class PuzzleSolver
 	private Stack<String> path;
 	private SearchTree tree;
 	
+	public PuzzleSolver(String start, String goal, String[] forbidden)
+	{
+		this.start = new Number(start);
+		this.goal = new Number(goal);
+		for (String s:forbidden)
+			this.forbidden.add(s);
+	}
+	
 	public PuzzleSolver(String filename)
 	{
 		this.readFile(filename);		
@@ -118,13 +126,42 @@ public class PuzzleSolver
 	{
 		Number tmpNum;
 		Node tmpNode;
-		Node curr;
+		Node curr = null;
 		fringe.add(node);
-		while(expanded.size()!=SEARCHLIMIT)
+		
+		while(expanded.size()<Double.POSITIVE_INFINITY)
 		{
-			curr = fringe.remove();
+			//avoid cycles: select a node from the fringe for expansion
+			//if it has not been expanded yet, expand it;else discard it
+			boolean unvisited =false;
+			while(!unvisited)
+			{
+				if (fringe.size()==0)
+				{
+					while(curr!=null)
+					{
+						path.push(curr.getNumber().Value());
+						curr = curr.parent();
+					}		
+					return true;
+				}
+				curr = fringe.remove();
+				unvisited= true;
+				if (expanded.size()!=0)
+				{
+					for (Node n:expanded)
+					{	
+						if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
+						{
+							unvisited = false;
+							break;
+						}
+					}
+				}				
+			}
+			
 			expanded.add(curr);
-
+			
 			if (curr.getNumber().Value().equals(goal.Value()))
 			{
 				while(curr!=null)
@@ -738,7 +775,6 @@ public class PuzzleSolver
 	
 	public boolean HillClimbing(Node node)
 	{
-		//TODO
 		Number tmpNum;
 		Node curr;
 		Node neighbour = null;
@@ -748,6 +784,7 @@ public class PuzzleSolver
 		while(expanded.size()!=SEARCHLIMIT)
 		{
 			expanded.add(curr);
+			//TODO need to improve path so that it can be printed out correctly
 			path.push(curr.getNumber().Value());
 			if (curr.getNumber().Value().equals(goal.Value()))	
 				return true;
@@ -915,6 +952,16 @@ public class PuzzleSolver
 			if (expanded.size()!=0)
 				System.out.print(",");
 		}
+	}
+	
+	public Stack<String> getPath()
+	{
+		return path;
+	}
+	
+	public Queue<Node> getExpanded()
+	{
+		return expanded;
 	}
 	
 	public static void main(String[] args)
