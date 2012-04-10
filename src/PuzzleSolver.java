@@ -17,14 +17,6 @@ public class PuzzleSolver
 	private Stack<String> path;
 	private SearchTree tree;
 	
-	public PuzzleSolver(String start, String goal, String[] forbidden)
-	{
-		this.start = new Number(start);
-		this.goal = new Number(goal);
-		for (String s:forbidden)
-			this.forbidden.add(s);
-	}
-	
 	public PuzzleSolver(String filename)
 	{
 		this.readFile(filename);		
@@ -59,24 +51,16 @@ public class PuzzleSolver
 		switch (strategy)
 		{
 		case 'B':
-			if(BFS(tree.Root()))
-			{
-				printPath();
-				System.out.println();
-				printExpanded();	
-			}
-			else
-				System.out.println("Goal not found");			
+			BFS(tree.Root());
+			printPath();
+			System.out.println();
+			printExpanded();				
 			break;
 		case 'D':
-			if(DFS(tree.Root()))
-			{
-				printPath();
-				System.out.println();
-				printExpanded();
-			}
-			else
-				System.out.println("Goal not found");
+			DFS(tree.Root());
+			printPath();
+			System.out.println();
+			printExpanded();
 			break;
 		case 'I':
 			if(IDS(tree.Root()))
@@ -129,7 +113,7 @@ public class PuzzleSolver
 		Node curr = null;
 		fringe.add(node);
 		
-		while(expanded.size()<Double.POSITIVE_INFINITY)
+		while(expanded.size()<SEARCHLIMIT)
 		{
 			//avoid cycles: select a node from the fringe for expansion
 			//if it has not been expanded yet, expand it;else discard it
@@ -137,14 +121,7 @@ public class PuzzleSolver
 			while(!unvisited)
 			{
 				if (fringe.size()==0)
-				{
-					while(curr!=null)
-					{
-						path.push(curr.getNumber().Value());
-						curr = curr.parent();
-					}		
 					return true;
-				}
 				curr = fringe.remove();
 				unvisited= true;
 				if (expanded.size()!=0)
@@ -270,9 +247,21 @@ public class PuzzleSolver
 		
 		Number tmpNum;
 		Node tmpNode;
-		Node curr;
+		Node curr = node;
+
+		//avoid cycles: select a node from the fringe for expansion
+		//if it has not been expanded yet, expand it;else discard it
+		if (expanded.size()!=0)
+		{
+			for (Node n:expanded)
+			{	
+				if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
+				{
+					return false;
+				}
+			}
+		}				
 		
-		curr = node;
 		expanded.add(curr);
 		
 		if (curr.getNumber().Value().equals(goal.Value()))
@@ -298,7 +287,7 @@ public class PuzzleSolver
 						path.push(curr.getNumber().Value());
 						return true;
 					}							
-				}//to get the newly added node of the children node list and check											
+				}										
 			}
 			if (curr.getNumber().firstDigit()<9)
 			{
@@ -952,16 +941,6 @@ public class PuzzleSolver
 			if (expanded.size()!=0)
 				System.out.print(",");
 		}
-	}
-	
-	public Stack<String> getPath()
-	{
-		return path;
-	}
-	
-	public Queue<Node> getExpanded()
-	{
-		return expanded;
 	}
 	
 	public static void main(String[] args)
