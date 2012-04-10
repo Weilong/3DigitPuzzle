@@ -14,7 +14,7 @@ public class IDS_TestCases {
 
 	Scanner s;
 	@Test
-	public void DFS_Test1() throws FileNotFoundException 
+	public void IDS_Test1() throws FileNotFoundException 
 	{
 		PrintStream originalOut = System.out;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -30,7 +30,7 @@ public class IDS_TestCases {
 	}
 	
 	@Test
-	public void DFS_Test2() throws FileNotFoundException 
+	public void IDS_Test2() throws FileNotFoundException 
 	{
 		PrintStream originalOut = System.out;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -46,7 +46,7 @@ public class IDS_TestCases {
 	}
 	
 	@Test
-	public void DFS_Test3() throws FileNotFoundException 
+	public void IDS_Test3() throws FileNotFoundException 
 	{
 		PrintStream originalOut = System.out;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -62,7 +62,7 @@ public class IDS_TestCases {
 	}
 	
 	@Test
-	public void DFS_Test4() throws FileNotFoundException 
+	public void IDS_Test4() throws FileNotFoundException 
 	{
 		PrintStream originalOut = System.out;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -78,7 +78,7 @@ public class IDS_TestCases {
 	}
 	
 	@Test
-	public void DFS_Test5() throws FileNotFoundException 
+	public void IDS_Test5() throws FileNotFoundException 
 	{
 		PrintStream originalOut = System.out;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -94,7 +94,7 @@ public class IDS_TestCases {
 	}
 	
 	@Test
-	public void DFS_Test6() throws FileNotFoundException 
+	public void IDS_Test6() throws FileNotFoundException 
 	{
 		PrintStream originalOut = System.out;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -110,7 +110,7 @@ public class IDS_TestCases {
 	}
 	
 	@Test
-	public void DFS_Test7() throws FileNotFoundException 
+	public void IDS_Test7() throws FileNotFoundException 
 	{
 		PrintStream originalOut = System.out;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();

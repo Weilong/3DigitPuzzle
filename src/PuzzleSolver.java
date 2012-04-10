@@ -14,6 +14,8 @@ public class PuzzleSolver
 	private ArrayList<String> forbidden = new ArrayList<String>(); 
 	private Queue<Node> fringe;
 	private Queue<Node>	expanded;
+	private Queue<Node>	tmpExpanded; //tmpExpanded list is to store the expanded nodes in IDS in each round so that 
+									 //when check cycle, the nodes from earlier round won't be checked.
 	private Stack<String> path;
 	private SearchTree tree;
 	
@@ -45,6 +47,7 @@ public class PuzzleSolver
 	{
 		fringe = new LinkedList<Node>();
 		expanded = new LinkedList<Node>();
+		tmpExpanded = new LinkedList<Node>();
 		path = new Stack<String>();
 		tree = new SearchTree(new Node(start));
 			
@@ -63,14 +66,10 @@ public class PuzzleSolver
 			printExpanded();
 			break;
 		case 'I':
-			if(IDS(tree.Root()))
-			{
-				printPath();
-				System.out.println();
-				printExpanded();
-			}
-			else
-				System.out.println("Goal not found");
+			IDS(tree.Root());
+			printPath();
+			System.out.println();
+			printExpanded();
 			break;
 		case 'G':
 			if(Greedy(tree.Root()))
@@ -390,6 +389,7 @@ public class PuzzleSolver
 		for (int limit=0;limit<Double.POSITIVE_INFINITY;limit++)
 		{
 			result = DLS(node,limit);
+			tmpExpanded.clear();			//clear tmpExpanded for next round.
 			if (result)
 				return result;
 			
@@ -401,18 +401,27 @@ public class PuzzleSolver
 	
 	public boolean DLS(Node node,int depth)
 	{
+		if(expanded.size()==SEARCHLIMIT)
+				return false;
 		if (depth>=0)
 		{
-			if(expanded.size()==SEARCHLIMIT)
-				return false;
-			
 			Number tmpNum;
 			Node tmpNode;
-			Node curr;
+			Node curr = node;
 			
-			curr = node;
+			if (expanded.size()!=0)
+			{
+				for (Node n:tmpExpanded)
+				{	
+					if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
+					{
+						return false;
+					}
+				}
+			}			
+			
+			tmpExpanded.add(curr);//System.out.println(depth+":"+curr.getNumber().Value()+":"+expanded.size());
 			expanded.add(curr);
-			
 			if (curr.getNumber().Value().equals(goal.Value()))
 			{
 				path.push(curr.getNumber().Value());
@@ -436,7 +445,7 @@ public class PuzzleSolver
 							path.push(curr.getNumber().Value());
 							return true;
 						}							
-					}//to get the newly added node of the children node list and check											
+					}											
 				}
 				if (curr.getNumber().firstDigit()<9)
 				{
