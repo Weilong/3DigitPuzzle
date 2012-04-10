@@ -72,14 +72,10 @@ public class PuzzleSolver
 			printExpanded();
 			break;
 		case 'G':
-			if(Greedy(tree.Root()))
-			{
-				printPath();
-				System.out.println();
-				printExpanded();
-			}
-			else
-				System.out.println("Goal not found");
+			Greedy(tree.Root());
+			printPath();
+			System.out.println();
+			printExpanded();
 			break;
 		case 'A':
 			if(AStar(tree.Root()))
@@ -553,6 +549,18 @@ public class PuzzleSolver
 		while(expanded.size()!=SEARCHLIMIT)
 		{
 			curr = minH;
+			
+			if (expanded.size()!=0)
+			{
+				for (Node n:expanded)
+				{	
+					if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
+					{
+						return false;
+					}
+				}
+			}			
+			
 			expanded.add(curr);
 
 			if (curr.getNumber().Value().equals(goal.Value()))
@@ -646,12 +654,17 @@ public class PuzzleSolver
 					}
 				}
 			}
-			minH = curr.getChildren().get(0);
-			for (Node n:curr.getChildren())
+			if (!curr.getChildren().isEmpty())
 			{
-				if (Heuristic(n)<Heuristic(minH))
-					minH = n;
+				minH = curr.getChildren().get(0);
+				for (Node n:curr.getChildren())
+				{
+					if (Heuristic(n)<Heuristic(minH))
+						minH = n;
+				}
 			}
+			else
+				return false;
 		}
 		return false;
 	}
