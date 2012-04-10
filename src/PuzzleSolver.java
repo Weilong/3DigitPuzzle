@@ -88,14 +88,10 @@ public class PuzzleSolver
 				System.out.println("Goal not found");
 			break;
 		case 'H':
-			if(HillClimbing(tree.Root()))
-			{
-				printPath();
-				System.out.println();
-				printExpanded();
-			}
-			else
-				System.out.println("Goal not found");
+			HillClimbing(tree.Root());
+			printPath();
+			System.out.println();
+			printExpanded();
 			break;
 		default:
 		}
@@ -787,13 +783,23 @@ public class PuzzleSolver
 	public boolean HillClimbing(Node node)
 	{
 		Number tmpNum;
-		Node curr;
+		Node curr = node;
 		Node neighbour = null;
-		
-		curr = node;
+		Node minH =null;
 		
 		while(expanded.size()!=SEARCHLIMIT)
 		{
+			if (expanded.size()!=0)
+			{
+				for (Node n:expanded)
+				{	
+					if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
+					{
+						return false;
+					}
+				}
+			}			
+			
 			expanded.add(curr);
 			//TODO need to improve path so that it can be printed out correctly
 			path.push(curr.getNumber().Value());
@@ -811,10 +817,13 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{	
 						neighbour = new Node(tmpNum);
-						if (Heuristic(neighbour)>=Heuristic(curr))
-								return true;
+						if (minH!=null)
+						{
+							if (Heuristic(neighbour)<=Heuristic(minH))
+								minH = neighbour;			
+						}
 						else
-							curr = neighbour;
+							minH = neighbour;
 					}
 				}
 				if (curr.getNumber().firstDigit()<9)
@@ -826,10 +835,13 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{	
 						neighbour = new Node(tmpNum);
-						if (Heuristic(neighbour)>=Heuristic(curr))
-								return true;
+						if (minH!=null)
+						{
+							if (Heuristic(neighbour)<=Heuristic(minH))
+								minH = neighbour;				
+						}
 						else
-							curr = neighbour;
+							minH = neighbour;
 					}
 				}
 			}
@@ -844,10 +856,13 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{	
 						neighbour = new Node(tmpNum);
-						if (Heuristic(neighbour)>=Heuristic(curr))
-								return true;
+						if (minH!=null)
+						{
+							if (Heuristic(neighbour)<=Heuristic(minH))
+								minH = neighbour;			
+						}
 						else
-							curr = neighbour;
+							minH = neighbour;
 					}
 				}
 				if (curr.getNumber().secondDigit()<9)
@@ -859,10 +874,13 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{	
 						neighbour = new Node(tmpNum);
-						if (Heuristic(neighbour)>=Heuristic(curr))
-								return true;
+						if (minH!=null)
+						{
+							if (Heuristic(neighbour)<=Heuristic(minH))
+								minH = neighbour;				
+						}
 						else
-							curr = neighbour;
+							minH = neighbour;
 					}
 				}
 			}
@@ -877,10 +895,13 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{	
 						neighbour = new Node(tmpNum);
-						if (Heuristic(neighbour)>=Heuristic(curr))
-								return true;
+						if (minH!=null)
+						{
+							if (Heuristic(neighbour)<=Heuristic(minH))
+								minH = neighbour;			
+						}
 						else
-							curr = neighbour;
+							minH = neighbour;
 					}
 				}
 				if (curr.getNumber().thirdDigit()<9)
@@ -892,20 +913,27 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						neighbour = new Node(tmpNum);
-						if (Heuristic(neighbour)>=Heuristic(curr))
-								return true;
+						if (minH!=null)
+						{
+							if (Heuristic(neighbour)<=Heuristic(minH))
+								minH = neighbour;				
+						}
 						else
-							curr = neighbour;
+							minH = neighbour;
 					}				
 				}
 			}
-			//check if current node has been replaced by a new node or not
-			//if not it means the searching cannot go any further, stop
-			//searching
-			if (curr.equals(curr))
-				return true;
+			//check if searching can go any deeper or not
+			if (minH!=null&&!minH.equals(curr))
+			{
+				if (Heuristic(minH)<=Heuristic(curr))
+					curr = minH;
+				else
+					return false;
+			}
+			else
+				return false;
 		}
-		
 		return false;
 	}
 	/**
