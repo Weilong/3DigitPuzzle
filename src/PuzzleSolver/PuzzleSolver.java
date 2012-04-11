@@ -87,24 +87,6 @@ public class PuzzleSolver
 				System.out.print("Depth limit reached");
 			break;
 		case 'G':
-			fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
-				@Override
-				public int compare(Node node1,Node node2)
-				{
-					if (h(node1)>h(node2))
-						return 1;
-					else if (h(node1)<h(node2))
-						return -1;
-					else
-					{
-						if (node1.timestamp()>node2.timestamp())
-							return -1;
-						if (node1.timestamp()<node2.timestamp())
-							return 1;
-						return 0;
-					}
-				}
-			});
 			if(Greedy(tree.Root()))
 			{
 				printPath();
@@ -115,24 +97,6 @@ public class PuzzleSolver
 				System.out.print("Depth limit reached");
 			break;
 		case 'A':
-			fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
-				@Override
-				public int compare(Node node1,Node node2)
-				{
-					if (f(node1)>f(node2))
-						return 1;
-					else if (f(node1)<f(node2))
-						return -1;
-					else
-					{
-						if (node1.timestamp()>node2.timestamp())
-							return -1;
-						if (node1.timestamp()<node2.timestamp())
-							return 1;
-						return 0;
-					}
-				}
-			});
 			if(AStar(tree.Root()))
 			{
 				printPath();
@@ -603,6 +567,24 @@ public class PuzzleSolver
 		Number tmpNum;
 		Node tmpNode;
 		Node curr = node;
+		fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
+			@Override
+			public int compare(Node node1,Node node2)
+			{
+				if (h(node1)>h(node2))
+					return 1;
+				else if (h(node1)<h(node2))
+					return -1;
+				else
+				{
+					if (node1.timestamp()>node2.timestamp())
+						return -1;
+					if (node1.timestamp()<node2.timestamp())
+						return 1;
+					return 0;
+				}
+			}
+		});
 		
 		fringe.add(curr);
 		while(expanded.size()!=SEARCHLIMIT)
@@ -743,6 +725,24 @@ public class PuzzleSolver
 		Number tmpNum;
 		Node tmpNode;
 		Node curr = node;
+		fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
+			@Override
+			public int compare(Node node1,Node node2)
+			{
+				if (f(node1)>f(node2))
+					return 1;
+				else if (f(node1)<f(node2))
+					return -1;
+				else
+				{
+					if (node1.timestamp()>node2.timestamp())
+						return -1;
+					if (node1.timestamp()<node2.timestamp())
+						return 1;
+					return 0;
+				}
+			}
+		});
 		
 		fringe.add(curr);
 		while(expanded.size()!=SEARCHLIMIT)
