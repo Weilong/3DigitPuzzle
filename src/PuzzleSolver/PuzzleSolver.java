@@ -1,5 +1,7 @@
 package PuzzleSolver;
 import java.io.*;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -73,20 +75,52 @@ public class PuzzleSolver
 			printExpanded();
 			break;
 		case 'G':
+			fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
+				@Override
+				public int compare(Node node1,Node node2)
+				{
+					if (h(node1)>h(node2))
+						return 1;
+					else if (h(node1)<h(node2))
+						return -1;
+					else
+					{
+						if (node1.timestamp()>node2.timestamp())
+							return -1;
+						if (node1.timestamp()<node2.timestamp())
+							return 1;
+						return 0;
+					}
+				}
+			});
 			Greedy(tree.Root());
 			printPath();
 			System.out.println();
 			printExpanded();
 			break;
 		case 'A':
-			if(AStar(tree.Root()))
-			{
-				printPath();
-				System.out.println();
-				printExpanded();
-			}
-			else
-				System.out.println("Goal not found");
+			fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
+				@Override
+				public int compare(Node node1,Node node2)
+				{
+					if (f(node1)>f(node2))
+						return 1;
+					else if (f(node1)<f(node2))
+						return -1;
+					else
+					{
+						if (node1.timestamp()>node2.timestamp())
+							return -1;
+						if (node1.timestamp()<node2.timestamp())
+							return 1;
+						return 0;
+					}
+				}
+			});
+			AStar(tree.Root());
+			printPath();
+			System.out.println();
+			printExpanded();
 			break;
 		case 'H':
 			HillClimbing(tree.Root());
@@ -540,26 +574,35 @@ public class PuzzleSolver
 	{
 		Number tmpNum;
 		Node tmpNode;
-		Node curr;
-		Node minH = node;
-	
+		Node curr = node;
+		
+		fringe.add(curr);
 		while(expanded.size()!=SEARCHLIMIT)
-		{
-			curr = minH;
-			
-			if (expanded.size()!=0)
+		{	
+			//avoid cycles: select a node from the fringe for expansion
+			//if it has not been expanded yet, expand it;else discard it
+			boolean unvisited =false;
+			while(!unvisited)
 			{
-				for (Node n:expanded)
-				{	
-					if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
-					{
-						return false;
+				if (fringe.size()==0)
+					return true;
+				curr = fringe.remove();
+				unvisited= true;
+				if (expanded.size()!=0)
+				{
+					for (Node n:expanded)
+					{	
+						if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
+						{
+							unvisited = false;
+							break;
+						}
 					}
-				}
-			}			
+				}				
+			}
 			
 			expanded.add(curr);
-
+			
 			if (curr.getNumber().Value().equals(goal.Value()))
 			{
 				while(curr!=null)
@@ -580,8 +623,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 				if (curr.getNumber().firstDigit()<9)
@@ -592,8 +637,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);		
 					}
 				}
 			}
@@ -607,8 +654,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 				if (curr.getNumber().secondDigit()<9)
@@ -619,8 +668,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 			}
@@ -634,8 +685,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 				if (curr.getNumber().thirdDigit()<9)
@@ -646,40 +699,50 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 			}
-			if (!curr.getChildren().isEmpty())
-			{
-				minH = curr.getChildren().get(0);
-				for (Node n:curr.getChildren())
-				{
-					if (Heuristic(n)<Heuristic(minH))
-						minH = n;
-				}
-			}
-			else
-				return false;
 		}
 		return false;
 	}
 	
 	public boolean AStar(Node node)
 	{
-		//TODO
 		Number tmpNum;
 		Node tmpNode;
-		Node curr;
-		Node minF = node;
-		int depth = 0;
-	
+		Node curr = node;
+		
+		fringe.add(curr);
 		while(expanded.size()!=SEARCHLIMIT)
-		{
-			curr = minF;
+		{	
+			//avoid cycles: select a node from the fringe for expansion
+			//if it has not been expanded yet, expand it;else discard it
+			boolean unvisited =false;
+			while(!unvisited)
+			{
+				if (fringe.size()==0)
+					return true;
+				curr = fringe.remove();
+				unvisited= true;
+				if (expanded.size()!=0)
+				{
+					for (Node n:expanded)
+					{	
+						if (n.getNumber().Value().equals(curr.getNumber().Value())&&n.getNumber().lastChanged().equals(curr.getNumber().lastChanged())||curr.getNumber().Value().equals(start.Value()))
+						{
+							unvisited = false;
+							break;
+						}
+					}
+				}				
+			}
+			
 			expanded.add(curr);
-
+			
 			if (curr.getNumber().Value().equals(goal.Value()))
 			{
 				while(curr!=null)
@@ -700,8 +763,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 				if (curr.getNumber().firstDigit()<9)
@@ -712,8 +777,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);		
 					}
 				}
 			}
@@ -727,8 +794,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 				if (curr.getNumber().secondDigit()<9)
@@ -739,8 +808,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 			}
@@ -754,8 +825,10 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
 				if (curr.getNumber().thirdDigit()<9)
@@ -766,16 +839,12 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
+						tmpNode.setTime(System.nanoTime());
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
+						fringe.add(tmpNode);
 					}
 				}
-			}
-			minF = curr.getChildren().get(0);
-			for (Node n:curr.getChildren())
-			{
-				if (Heuristic(n)<Heuristic(minF))
-					minF = n;
 			}
 		}
 		return false;
@@ -827,7 +896,7 @@ public class PuzzleSolver
 						neighbour = new Node(tmpNum);
 						if (minH!=null)
 						{
-							if (Heuristic(neighbour)<=Heuristic(minH))
+							if (h(neighbour)<=h(minH))
 								minH = neighbour;			
 						}
 						else
@@ -845,7 +914,7 @@ public class PuzzleSolver
 						neighbour = new Node(tmpNum);
 						if (minH!=null)
 						{
-							if (Heuristic(neighbour)<=Heuristic(minH))
+							if (h(neighbour)<=h(minH))
 								minH = neighbour;				
 						}
 						else
@@ -866,7 +935,7 @@ public class PuzzleSolver
 						neighbour = new Node(tmpNum);
 						if (minH!=null)
 						{
-							if (Heuristic(neighbour)<=Heuristic(minH))
+							if (h(neighbour)<=h(minH))
 								minH = neighbour;			
 						}
 						else
@@ -884,7 +953,7 @@ public class PuzzleSolver
 						neighbour = new Node(tmpNum);
 						if (minH!=null)
 						{
-							if (Heuristic(neighbour)<=Heuristic(minH))
+							if (h(neighbour)<=h(minH))
 								minH = neighbour;				
 						}
 						else
@@ -905,7 +974,7 @@ public class PuzzleSolver
 						neighbour = new Node(tmpNum);
 						if (minH!=null)
 						{
-							if (Heuristic(neighbour)<=Heuristic(minH))
+							if (h(neighbour)<=h(minH))
 								minH = neighbour;			
 						}
 						else
@@ -923,7 +992,7 @@ public class PuzzleSolver
 						neighbour = new Node(tmpNum);
 						if (minH!=null)
 						{
-							if (Heuristic(neighbour)<=Heuristic(minH))
+							if (h(neighbour)<=h(minH))
 								minH = neighbour;				
 						}
 						else
@@ -934,7 +1003,7 @@ public class PuzzleSolver
 			//check if searching can go any deeper or not
 			if (minH!=null&&!minH.equals(curr))
 			{
-				if (Heuristic(minH)<=Heuristic(curr))
+				if (h(minH)<=h(curr))
 					curr = minH;
 				else
 					return false;
@@ -968,20 +1037,32 @@ public class PuzzleSolver
 	 * @param node
 	 * @return
 	 */
-	public int Heuristic(Node node)
+	public int h(Node node)
 	{
-		int h;
-		int u;
+		int h,u;
 		int firstDigitDiff=Math.abs(node.getNumber().firstDigit()-goal.firstDigit()),
 			secondDigitDiff=Math.abs(node.getNumber().secondDigit()-goal.secondDigit()),
 			thirdDigitDiff=Math.abs(node.getNumber().thirdDigit()-goal.thirdDigit());
 		u=	Math.max(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff)) -
 			Math.min(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff));
-		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff +(u>1?u:0); // TODO to be commented
+		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff;// +(u>1?u:0); // TODO to be commented
 				
 		return h;
 	}
 	
+	public int g(Node node)
+	{
+		int depth;
+		
+		for (depth=0;node!=null;depth++)
+			node = node.parent();
+		return depth;
+	}
+	
+	public int f(Node node)
+	{
+		return g(node)+h(node);
+	}
 	public void printPath()
 	{
 		while (!path.isEmpty())
