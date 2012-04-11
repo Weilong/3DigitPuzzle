@@ -57,22 +57,34 @@ public class PuzzleSolver
 		switch (strategy)
 		{
 		case 'B':
-			BFS(tree.Root());
-			printPath();
-			System.out.println();
-			printExpanded();				
+			if(BFS(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();	
+			}
+			else
+				System.out.print("Depth limit reached");					
 			break;
 		case 'D':
-			DFS(tree.Root());
-			printPath();
-			System.out.println();
-			printExpanded();
+			if(DFS(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();	
+			}
+			else
+				System.out.print("Depth limit reached");
 			break;
 		case 'I':
-			IDS(tree.Root());
-			printPath();
-			System.out.println();
-			printExpanded();
+			if(IDS(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();	
+			}
+			else
+				System.out.print("Depth limit reached");
 			break;
 		case 'G':
 			fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
@@ -93,10 +105,14 @@ public class PuzzleSolver
 					}
 				}
 			});
-			Greedy(tree.Root());
-			printPath();
-			System.out.println();
-			printExpanded();
+			if(Greedy(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();	
+			}
+			else
+				System.out.print("Depth limit reached");
 			break;
 		case 'A':
 			fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
@@ -117,13 +133,25 @@ public class PuzzleSolver
 					}
 				}
 			});
-			AStar(tree.Root());
-			printPath();
-			System.out.println();
-			printExpanded();
+			if(AStar(tree.Root()))
+			{
+				printPath();
+				System.out.println();
+				printExpanded();	
+			}
+			else
+				System.out.print("Depth limit reached");
 			break;
 		case 'H':
 			HillClimbing(tree.Root());
+			//turn the path into a normal order
+			Queue<Node> tmpQ = new LinkedList<Node>();
+			path.addAll(expanded);
+			while (!path.isEmpty())
+				tmpQ.add(path.pop());
+			while (!tmpQ.isEmpty())
+				path.add(tmpQ.poll());
+			
 			printPath();
 			System.out.println();
 			printExpanded();
@@ -873,16 +901,8 @@ public class PuzzleSolver
 			expanded.add(curr);
 			
 			if (curr.getNumber().Value().equals(goal.Value()))
-			{
-				//turn the path into a normal order
-				Queue<Node> tmpQ = new LinkedList<Node>();
-				path.addAll(expanded);
-				while (!path.isEmpty())
-					tmpQ.add(path.pop());
-				while (!tmpQ.isEmpty())
-					path.add(tmpQ.poll());
 				return true;
-			}				
+				
 			if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
 			{
 				if (curr.getNumber().firstDigit()>0)

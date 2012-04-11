@@ -15,6 +15,7 @@ import PuzzleSolver.PuzzleSolver;
 public class DFS_TestCases {
 
 	Scanner s;
+	String line1,line2;
 	@Test
 	public void DFS_Test1() throws FileNotFoundException 
 	{
@@ -26,7 +27,16 @@ public class DFS_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in1");
 		solver.solve('D');
 		s = new Scanner(new File("ai_ass1_tests/out/1_d"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
 		
 		System.setOut(originalOut);	
 		
@@ -43,7 +53,16 @@ public class DFS_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in2");
 		solver.solve('D');
 		s = new Scanner(new File("ai_ass1_tests/out/2_d"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
 		
 		System.setOut(originalOut);	
 	}
@@ -59,7 +78,16 @@ public class DFS_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in3");
 		solver.solve('D');
 		s = new Scanner(new File("ai_ass1_tests/out/3_d"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
 		
 		System.setOut(originalOut);	
 	}
@@ -75,7 +103,16 @@ public class DFS_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in4");
 		solver.solve('D');
 		s = new Scanner(new File("ai_ass1_tests/out/4_d"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
 		
 		System.setOut(originalOut);	
 	}
@@ -91,7 +128,16 @@ public class DFS_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in5");
 		solver.solve('D');
 		s = new Scanner(new File("ai_ass1_tests/out/5_d"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
 		
 		System.setOut(originalOut);	
 	}
@@ -107,7 +153,16 @@ public class DFS_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in6");
 		solver.solve('D');
 		s = new Scanner(new File("ai_ass1_tests/out/6_d"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
 		
 		System.setOut(originalOut);	
 	}
@@ -123,9 +178,218 @@ public class DFS_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in7");
 		solver.solve('D');
 		s = new Scanner(new File("ai_ass1_tests/out/7_d"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
 		
 		System.setOut(originalOut);	
 	}
 
+	@Test
+	public void DFS_Test8() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in8");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/8_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
+	@Test
+	public void DFS_Test9() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in9");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/9_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
+	@Test
+	public void DFS_Test10() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in10");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/10_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
+	@Test
+	public void DFS_Test11() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in11");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/11_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
+	@Test
+	public void DFS_Test12() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in12");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/12_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
+	@Test
+	public void DFS_Test13() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in13");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/13_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
+	@Test
+	public void DFS_Test14() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in14");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/14_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
+	@Test
+	public void DFS_Test15() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in15");
+		solver.solve('D');
+		s = new Scanner(new File("ai_ass1_tests/out/15_d"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+		
+		System.setOut(originalOut);	
+		
+	}
 }

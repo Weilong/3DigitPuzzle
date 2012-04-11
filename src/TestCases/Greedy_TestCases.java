@@ -17,6 +17,7 @@ import java.util.Scanner;
 public class Greedy_TestCases {
 
 	Scanner s;
+	String line1,line2;
 	@Test
 	public void Greedy_Test1() throws FileNotFoundException 
 	{
@@ -28,7 +29,14 @@ public class Greedy_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in1");
 		solver.solve('G');
 		s = new Scanner(new File("ai_ass1_tests/out/1_G"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
 		
 		System.setOut(originalOut);	
 	}
@@ -44,7 +52,14 @@ public class Greedy_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in2");
 		solver.solve('G');
 		s = new Scanner(new File("ai_ass1_tests/out/2_G"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
 		
 		System.setOut(originalOut);	
 	}
@@ -60,7 +75,14 @@ public class Greedy_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in3");
 		solver.solve('G');
 		s = new Scanner(new File("ai_ass1_tests/out/3_G"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
 		
 		System.setOut(originalOut);	
 	}
@@ -76,7 +98,14 @@ public class Greedy_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in4");
 		solver.solve('G');
 		s = new Scanner(new File("ai_ass1_tests/out/4_G"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
 		
 		System.setOut(originalOut);	
 	}
@@ -92,7 +121,14 @@ public class Greedy_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in5");
 		solver.solve('G');
 		s = new Scanner(new File("ai_ass1_tests/out/5_G"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
 		
 		System.setOut(originalOut);	
 	}
@@ -108,7 +144,14 @@ public class Greedy_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in6");
 		solver.solve('G');
 		s = new Scanner(new File("ai_ass1_tests/out/6_G"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
 		
 		System.setOut(originalOut);	
 	}
@@ -124,10 +167,200 @@ public class Greedy_TestCases {
 		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in7");
 		solver.solve('G');
 		s = new Scanner(new File("ai_ass1_tests/out/7_G"));
-		assertEquals(s.nextLine()+"\n"+s.nextLine(),os.toString());
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
 		
 		System.setOut(originalOut);	
 	}
 
+	@Test
+	public void Greedy_Test8() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in8");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/8_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
+	
+	@Test
+	public void Greedy_Test9() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in9");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/9_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
+	
+	@Test
+	public void Greedy_Test10() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in10");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/10_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
+	
+	@Test
+	public void Greedy_Test11() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in11");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/11_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
+	
+	@Test
+	public void Greedy_Test12() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in12");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/12_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
+	
+	@Test
+	public void Greedy_Test13() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in13");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/13_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
+	
+	@Test
+	public void Greedy_Test14() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in14");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/14_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
+	
+	@Test
+	public void Greedy_Test15() throws FileNotFoundException 
+	{
+		PrintStream originalOut = System.out;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(os);
+		System.setOut(ps);
+		
+		PuzzleSolver solver = new PuzzleSolver("ai_ass1_tests/in/in15");
+		solver.solve('G');
+		s = new Scanner(new File("ai_ass1_tests/out/15_G"));
+		line1 = s.nextLine();
+		if (s.hasNextLine())
+		{
+			line2 = s.nextLine();
+			assertEquals(line1+"\n"+line2,os.toString());
+		}
+		else
+			assertEquals(line1,os.toString());
+		
+		System.setOut(originalOut);	
+	}
 }
 
