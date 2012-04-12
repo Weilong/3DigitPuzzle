@@ -7,7 +7,17 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
-
+/**
+ * COMP3308 Introduction to AI Assignment1
+ * PuzzleSolver.java
+ * Purpose: the main class of the program. receive the command from user
+ * and do the chosen algorithm on given data. when searching is done print
+ * out the path and expanded node list. If the searching hits the limit,
+ * print out a warning message "Depth limit reached"
+ *
+ * @author Weilong Ding
+ * @version 1.0 12/04/2012
+ */
 public class PuzzleSolver
 {
 	final int SEARCHLIMIT =1000;	//set a limit of 1000 expanded nodes maximum
@@ -17,17 +27,30 @@ public class PuzzleSolver
 	private ArrayList<String> forbidden = new ArrayList<String>(); 
 	private Queue<Node> fringe;
 	private Queue<Node>	expanded;
-	private Queue<Node>	tmpExpanded; //tmpExpanded list is to store the expanded nodes in IDS in each round so that 
-									 //when check cycle, the nodes from earlier round won't be checked.
+	
+	/*
+	 * tmpExpanded list is to store the expanded nodes in IDS in 
+	 * each round so that when check cycle, the nodes from earlier 
+	 * round won't be checked.
+	 */
+	private Queue<Node>	tmpExpanded; 
 	private Stack<Node> path;
 	private SearchTree tree;
-	private int NodeNum =1;
-	
+	private int nodeNum;
+	/**
+	 * This is the constructor of PuzzleSolver class which will read
+	 * a file and initialize start, goal, and forbidden number list
+	 * @param filename the directory of input file
+	 */
 	public PuzzleSolver(String filename)
 	{
 		this.readFile(filename);		
 	}
 	
+	/**
+	 * Read a file from given directory and assign values to start, 
+	 * goal and forbidden number list
+	 */
 	public void readFile(String filename)
 	{
 		File file = new File(filename);
@@ -47,6 +70,11 @@ public class PuzzleSolver
 		}
 	}
 	
+	/**
+	 * Does the main logic of 3 digit puzzle solver. Certain search
+	 * algorithm will run according to the given strategy.
+	 * @param strategy refers to the first char of chosen algorithm
+	 */
 	public void solve(char strategy)
 	{
 		fringe = new LinkedList<Node>();
@@ -58,7 +86,7 @@ public class PuzzleSolver
 		switch (strategy)
 		{
 		case 'B':
-			if(BFS(tree.Root()))
+			if(BFS(tree.root()))
 			{
 				printPath();
 				System.out.println();
@@ -68,7 +96,7 @@ public class PuzzleSolver
 				System.out.print("Depth limit reached");					
 			break;
 		case 'D':
-			if(DFS(tree.Root()))
+			if(DFS(tree.root()))
 			{
 				printPath();
 				System.out.println();
@@ -78,7 +106,7 @@ public class PuzzleSolver
 				System.out.print("Depth limit reached");
 			break;
 		case 'I':
-			if(IDS(tree.Root()))
+			if(IDS(tree.root()))
 			{
 				printPath();
 				System.out.println();
@@ -88,7 +116,7 @@ public class PuzzleSolver
 				System.out.print("Depth limit reached");
 			break;
 		case 'G':
-			if(Greedy(tree.Root()))
+			if(Greedy(tree.root()))
 			{
 				printPath();
 				System.out.println();
@@ -98,7 +126,7 @@ public class PuzzleSolver
 				System.out.print("Depth limit reached");
 			break;
 		case 'A':
-			if(AStar(tree.Root()))
+			if(AStar(tree.root()))
 			{
 				printPath();
 				System.out.println();
@@ -108,7 +136,7 @@ public class PuzzleSolver
 				System.out.print("Depth limit reached");
 			break;
 		case 'H':
-			HillClimbing(tree.Root());
+			HillClimbing(tree.root());
 			//turn the path into a normal order
 			Queue<Node> tmpQ = new LinkedList<Node>();
 			path.addAll(expanded);
@@ -125,6 +153,12 @@ public class PuzzleSolver
 		}
 	}
 	
+	/**
+	 * Does breadth-first-search from start to find the goal
+	 * @param node is the start node
+	 * @return result of BFS, if goal found return true,
+	 * otherwise return false.
+	 */
 	public boolean BFS(Node node)
 	{
 		Number tmpNum;
@@ -259,6 +293,12 @@ public class PuzzleSolver
 		return false;
 	}
 	
+	/**
+	 * Does depth-first-search from start to find the goal
+	 * @param node is the latest expanded node
+	 * @return result of DFS, if goal found return true,
+	 * otherwise return false.
+	 */
 	public boolean DFS(Node node)
 	{
 		if(expanded.size()==SEARCHLIMIT)
@@ -403,6 +443,12 @@ public class PuzzleSolver
 		return false;
 	}
 	
+	/**
+	 * Does iterative-deepening-search from start to find the goal
+	 * @param node is the start node
+	 * @return result of IDS, if goal found return true,
+	 * otherwise return false.
+	 */
 	public boolean IDS(Node node)
 	{
 		boolean result = false;
@@ -419,6 +465,13 @@ public class PuzzleSolver
 		return result;
 	}
 	
+	/**
+	 * Does depth-limited-search from start to find the goal
+	 * @param node is the start node
+	 * @param depth is the limit the searching can reach
+	 * @return result of DLS, if goal found return true,
+	 * otherwise return false.
+	 */
 	public boolean DLS(Node node,int depth)
 	{
 		if(expanded.size()==SEARCHLIMIT)
@@ -563,11 +616,18 @@ public class PuzzleSolver
 		return false;
 	}
 	
+	/**
+	 * Does greedy search from start to find the goal
+	 * @param node is the start node
+	 * @return result of Greedy, if goal found return true,
+	 * otherwise return false.
+	 */
 	public boolean Greedy(Node node)
 	{
 		Number tmpNum;
 		Node tmpNode;
 		Node curr = node;
+		nodeNum = 1;
 		fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
 			@Override
 			public int compare(Node node1,Node node2)
@@ -578,9 +638,9 @@ public class PuzzleSolver
 					return -1;
 				else
 				{
-					if (node1.ID()>node2.ID())
+					if (node1.id()>node2.id())
 						return -1;
-					if (node1.ID()<node2.ID())
+					if (node1.id()<node2.id())
 						return 1;
 					return 0;
 				}
@@ -634,7 +694,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -648,7 +708,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);		
@@ -665,7 +725,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -679,7 +739,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -696,7 +756,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -710,7 +770,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -721,11 +781,18 @@ public class PuzzleSolver
 		return false;
 	}
 	
+	/**
+	 * Does A* search from start to find the goal
+	 * @param node is the start node
+	 * @return result of A*, if goal found return true,
+	 * otherwise return false.
+	 */
 	public boolean AStar(Node node)
 	{
 		Number tmpNum;
 		Node tmpNode;
 		Node curr = node;
+		nodeNum = 1;
 		fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
 			@Override
 			public int compare(Node node1,Node node2)
@@ -736,9 +803,9 @@ public class PuzzleSolver
 					return -1;
 				else
 				{
-					if (node1.ID()>node2.ID())
+					if (node1.id()>node2.id())
 						return -1;
-					if (node1.ID()<node2.ID())
+					if (node1.id()<node2.id())
 						return 1;
 					return 0;
 				}
@@ -792,7 +859,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -806,7 +873,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);		
@@ -823,7 +890,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -837,7 +904,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -854,7 +921,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -868,7 +935,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(NodeNum++);
+						tmpNode.setID(nodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -879,6 +946,12 @@ public class PuzzleSolver
 		return false;
 	}
 	
+	/**
+	 * Does hill climbing search from start to find the goal
+	 * @param node is the start node
+	 * @return result of Hill-Climbing, if goal found return true,
+	 * otherwise return false.
+	 */
 	public boolean HillClimbing(Node node)
 	{
 		Number tmpNum;
@@ -1055,8 +1128,8 @@ public class PuzzleSolver
 	 * 4) so far the heuristic is admissible and another constraint for the puzzle is the forbidden numbers
 	 * which make the heuristic even more admissible because we need more steps to "detour" the forbidden
 	 * numbers.
-	 * @param node
-	 * @return
+	 * @param node is the one we want to calculate with
+	 * @return the heuristic value of the node;
 	 */
 	public int h(Node node)
 	{
@@ -1066,11 +1139,21 @@ public class PuzzleSolver
 			thirdDigitDiff=Math.abs(node.getNumber().thirdDigit()-goal.thirdDigit());
 		u=	Math.max(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff)) -
 			Math.min(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff));
-		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff;// +(u>1?u:0); // TODO to be commented
+		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff;
+		//TODO to be commented
+		/*
+		 *
+		 */
+		//h = firstDigitDiff + secondDigitDiff + thirdDigitDiff +(u>1?u:0);
 				
 		return h;
 	}
 	
+	/**
+	 * calculate the cost to reach the node from start
+	 * @param node is the one we want to reach
+	 * @return cost
+	 */
 	public int g(Node node)
 	{
 		int depth;
@@ -1080,10 +1163,20 @@ public class PuzzleSolver
 		return depth;
 	}
 	
+	/**
+	 * calculate the f value of the node. F value is the sum of the cost to reach
+	 * the node and the heuristic of the node
+	 * @param node is the one want to calculate
+	 * @return f value of the node
+	 */
 	public int f(Node node)
 	{
 		return g(node)+h(node);
 	}
+	
+	/**
+	 * print out the path from start to goal
+	 */
 	public void printPath()
 	{
 		while (!path.isEmpty())
@@ -1094,6 +1187,9 @@ public class PuzzleSolver
 		}
 	}
 	
+	/**
+	 * print out all expanded nodes
+	 */
 	public void printExpanded()
 	{
 		while(expanded.size()!=0)
@@ -1104,6 +1200,10 @@ public class PuzzleSolver
 		}
 	}
 	
+	/**
+	 * main method to run the program
+	 * @param args is used to pass test file and the chosen algorithm
+	 */
 	public static void main(String[] args)
 	{
 		PuzzleSolver solver = new PuzzleSolver(args[0]);

@@ -12,7 +12,14 @@ import org.junit.Test;
 import PuzzleSolver.PuzzleSolver;
 
 import java.util.Scanner;
-
+/**
+ * COMP3308 Introduction to AI Assignment1
+ * IDS_TestCases.java
+ * Purpose: Test cases for Iterative Deepening Search
+ *
+ * @author Weilong Ding
+ * @version 1.0 12/04/2012
+ */
 
 public class IDS_TestCases {
 

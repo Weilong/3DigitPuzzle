@@ -11,7 +11,14 @@ import PuzzleSolver.PuzzleSolver;
 import java.io.File;
 import java.util.Scanner;
 
-
+/**
+ * COMP3308 Introduction to AI Assignment1
+ * BFS_TestCases.java
+ * Purpose: Test cases for Breadth First Search
+ *
+ * @author Weilong Ding
+ * @version 1.0 12/04/2012
+ */
 public class BFS_TestCases {
 
 	Scanner s;

@@ -11,7 +11,14 @@ import org.junit.Test;
 
 import PuzzleSolver.PuzzleSolver;
 
-
+/**
+ * COMP3308 Introduction to AI Assignment1
+ * DFS_TestCases.java
+ * Purpose: Test cases for Depth First Search
+ *
+ * @author Weilong Ding
+ * @version 1.0 12/04/2012
+ */
 public class DFS_TestCases {
 
 	Scanner s;

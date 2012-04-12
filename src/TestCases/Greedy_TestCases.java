@@ -13,7 +13,14 @@ import PuzzleSolver.PuzzleSolver;
 
 import java.util.Scanner;
 
-
+/**
+ * COMP3308 Introduction to AI Assignment1
+ * Greedy_TestCases.java
+ * Purpose: Test cases for Greedy Search
+ *
+ * @author Weilong Ding
+ * @version 1.0 12/04/2012
+ */
 public class Greedy_TestCases {
 
 	Scanner s;
