@@ -31,12 +31,14 @@ public class PuzzleSolver
 	/*
 	 * tmpExpanded list is to store the expanded nodes in IDS in 
 	 * each round so that when check cycle, the nodes from earlier 
-	 * round won't be checked.
+	 * round won't be checked. after each round tmpExpanded will be
+	 * appended to expanded.
 	 */
 	private Queue<Node>	tmpExpanded; 
 	private Stack<Node> path;
 	private SearchTree tree;
-	private int nodeNum;
+	private int nodeNum;	//the total number of generated nodes
+	
 	/**
 	 * This is the constructor of PuzzleSolver class which will read
 	 * a file and initialize start, goal, and forbidden number list
@@ -85,7 +87,7 @@ public class PuzzleSolver
 			
 		switch (strategy)
 		{
-		case 'B':
+		case 'B':	//run breadth-first search
 			if(BFS(tree.root()))
 			{
 				printPath();
@@ -95,7 +97,7 @@ public class PuzzleSolver
 			else
 				System.out.print("Depth limit reached");					
 			break;
-		case 'D':
+		case 'D':	//run depth-first-search
 			if(DFS(tree.root()))
 			{
 				printPath();
@@ -105,7 +107,7 @@ public class PuzzleSolver
 			else
 				System.out.print("Depth limit reached");
 			break;
-		case 'I':
+		case 'I':	//run iterative-depth-search
 			if(IDS(tree.root()))
 			{
 				printPath();
@@ -115,7 +117,7 @@ public class PuzzleSolver
 			else
 				System.out.print("Depth limit reached");
 			break;
-		case 'G':
+		case 'G':	//run greedy search
 			if(Greedy(tree.root()))
 			{
 				printPath();
@@ -125,7 +127,7 @@ public class PuzzleSolver
 			else
 				System.out.print("Depth limit reached");
 			break;
-		case 'A':
+		case 'A':	//run A* search
 			if(AStar(tree.root()))
 			{
 				printPath();
@@ -135,9 +137,16 @@ public class PuzzleSolver
 			else
 				System.out.print("Depth limit reached");
 			break;
-		case 'H':
+		case 'H':	//run hill-climbing search
 			HillClimbing(tree.root());
-			//turn the path into a normal order
+			/*
+			 * for hill-climbing search the result should be printed
+			 * out no matter the goal is found or not. for in hill-
+			 * climbing search only store one node in the memory, we
+			 * need to trace back from where we stop.therefore before 
+			 * print out the path we need turn the path over so that 
+			 * it will be printed out in a correct order
+			 */
 			Queue<Node> tmpQ = new LinkedList<Node>();
 			path.addAll(expanded);
 			while (!path.isEmpty())
@@ -165,19 +174,28 @@ public class PuzzleSolver
 		Node tmpNode;
 		Node curr = null;
 		fringe.add(node);
-		
+		//searching will stop when the number of expanded nodes hits the limit
 		while(expanded.size()<SEARCHLIMIT)
 		{
-			//avoid cycles: select a node from the fringe for expansion
-			//if it has not been expanded yet, expand it;else discard it
+			/*
+			 * avoid cycles: select a node from the fringe for expansion
+			 * if it has not been expanded yet, expand it;else discard it
+			 */
 			boolean unvisited =false;
 			while(!unvisited)
 			{
-				if (fringe.size()==0)
+				if (fringe.size()==0)	//when there is no node left for expanding, stop searching
 					return true;
 				curr = fringe.remove();
 				unvisited= true;
-				if (expanded.size()!=0)
+				/*
+				 * if expanded node list is not empty, compare current node with nodes in expanded list
+				 * only two numbers with same value and same last changed digit are considered as identical
+				 * only two nodes with identical numbers are considered identical. if a node has been visited,
+				 * remove it from fringe, pop out another one and keep comparing until the current node is 
+				 * unvisited or fringe become empty
+				 */
+				if (!expanded.isEmpty())
 				{
 					for (Node n:expanded)
 					{	
@@ -192,6 +210,9 @@ public class PuzzleSolver
 			
 			expanded.add(curr);
 			
+			/*
+			 * if the goal is reached, prepare path list and return true
+			 */
 			if (curr.getNumber().Value().equals(goal.Value()))
 			{
 				while(curr!=null)
@@ -201,14 +222,31 @@ public class PuzzleSolver
 				}		
 				return true;
 			}
-					
-			if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)
+				
+			/*
+			 * Each node has no more than six possible children:
+			 * 1) if first digit has not been changed last time
+			 * we can get two children by adding and subtracting 1
+			 * from first digit
+			 * 2) if second digit has not been changed last time
+			 * we can get two children by adding and subtracting 1
+			 * from the second digit
+			 * 3) if third digit has not been changed last time
+			 * we can get two children by adding and subtracting 1
+			 * from the third digit
+			 */
+			/*
+			 * if first digit has not been changed,manipulate the first digit
+			 */
+			if (curr.getNumber().lastChanged()!=Number.Digit.FIRST)	
 			{
+				//if first digit larger than 0, increase by 1
 				if (curr.getNumber().firstDigit()>0)
 				{
 					tmpNum = new Number(curr);
 					tmpNum.firstDigitDec();
-					tmpNum.setLastChanged(Number.Digit.FIRST);
+					tmpNum.setLastChanged(Number.Digit.FIRST);	//set lastChangedDigit as first digit
+					//if the number is not forbidden, create node
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
@@ -217,11 +255,13 @@ public class PuzzleSolver
 						fringe.add(tmpNode);
 					}					
 				}
+				//if first digit less than 0, decrease by 1
 				if (curr.getNumber().firstDigit()<9)
 				{
 					tmpNum = new Number(curr);
 					tmpNum.firstDigitInc();
 					tmpNum.setLastChanged(Number.Digit.FIRST);
+					//if the number is not forbidden, create node
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
@@ -231,13 +271,18 @@ public class PuzzleSolver
 					}	
 				}
 			}
-			if (curr.getNumber().lastChanged()!=Number.Digit.SECOND)
+			/*
+			 * if secondDigit has not been changed,manipulate the second digit
+			 */
+			if (curr.getNumber().lastChanged()!=Number.Digit.SECOND)	
 			{
+				//if second digit larger than 0, increase by 1
 				if (curr.getNumber().secondDigit()>0)
 				{
 					tmpNum = new Number(curr);
 					tmpNum.secondDigitDec();
 					tmpNum.setLastChanged(Number.Digit.SECOND);
+					//if the number is not forbidden, create node
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
@@ -246,11 +291,13 @@ public class PuzzleSolver
 						fringe.add(tmpNode);
 					}	
 				}
+				//if second digit less than 9, decrease by 1
 				if (curr.getNumber().secondDigit()<9)
 				{
 					tmpNum = new Number(curr);
 					tmpNum.secondDigitInc();
 					tmpNum.setLastChanged(Number.Digit.SECOND);
+					//if the number is not forbidden, create node
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
@@ -260,13 +307,18 @@ public class PuzzleSolver
 					}	
 				}
 			}
-			if (curr.getNumber().lastChanged()!=Number.Digit.THIRD)
+			/*
+			 * if thirdDigit has not been changed, manipulate the third digit
+			 */
+			if (curr.getNumber().lastChanged()!=Number.Digit.THIRD)	
 			{
+				//if third digit larger than 0, increase by 1
 				if (curr.getNumber().thirdDigit()>0)
 				{
 					tmpNum = new Number(curr);
 					tmpNum.thirdDigitDec();
 					tmpNum.setLastChanged(Number.Digit.THIRD);
+					//if the number is not forbidden, create node
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
@@ -275,11 +327,13 @@ public class PuzzleSolver
 						fringe.add(tmpNode);
 					}	
 				}
+				//if third digit less than 9, decrease by 1
 				if (curr.getNumber().thirdDigit()<9)
 				{
 					tmpNum = new Number(curr);
 					tmpNum.thirdDigitInc();
 					tmpNum.setLastChanged(Number.Digit.THIRD);
+					//if the number is not forbidden, create node
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
@@ -301,6 +355,10 @@ public class PuzzleSolver
 	 */
 	public boolean DFS(Node node)
 	{
+		/*
+		 * if the number of expanded node hits the limit, jump out
+		 * of the recursion
+		 */
 		if(expanded.size()==SEARCHLIMIT)
 			return false;
 		
@@ -308,9 +366,11 @@ public class PuzzleSolver
 		Node tmpNode;
 		Node curr = node;
 
-		//avoid cycles: select a node from the fringe for expansion
-		//if it has not been expanded yet, expand it;else discard it
-		if (expanded.size()!=0)
+		/*
+		 * avoid cycles: select a node from the fringe for expansion
+		 * if it has not been expanded yet, expand it;else discard it
+		 */
+		if (!expanded.isEmpty())
 		{
 			for (Node n:expanded)
 			{	
@@ -341,6 +401,12 @@ public class PuzzleSolver
 					tmpNode = new Node(tmpNum);
 					tmpNode.setParent(curr);
 					curr.getChildren().add(tmpNode);
+					/*
+					 * pass the generated node to another DFS method
+					 * to do recursion. if goal found true will be returned
+					 * and the current node will be pushed into path list
+					 * while the searching gets all the way out of the recursion
+					 */
 					if (DFS(tmpNode))
 					{
 						path.push(curr);
@@ -481,8 +547,8 @@ public class PuzzleSolver
 			Number tmpNum;
 			Node tmpNode;
 			Node curr = node;
-			
-			if (expanded.size()!=0)
+			//if the current node has already been expanded, jump out of this round
+			if (!expanded.isEmpty())
 			{
 				for (Node n:tmpExpanded)
 				{	
@@ -628,6 +694,23 @@ public class PuzzleSolver
 		Node tmpNode;
 		Node curr = node;
 		nodeNum = 1;
+		/*
+		 * Due to the specificity of informed search, we need to use a 
+		 * Priority Queue as the fringe.the fringe will store the nodes
+		 * in a non-decreasing order.what is more important is that if we
+		 * got nodes with same heuristic value, the last added node should
+		 * always be stored in front of the others with same value.
+		 * if we only compare the heuristic value, the last added node will
+		 * be stored at the end by default
+		 * therefore here to cater our requirements we need to override the
+		 * comparator to have a second criteria to compare the node.
+		 * we first compare the heuristic, if node1 got larger value, it will
+		 * be put after node2. if node1 got smaller value, it will be put
+		 * before node2. if they got same value, we continue to compare their
+		 * id.A smaller ID means this node is created earlier so that we can put
+		 * the node with larger ID at front and vice versa. and this new comparator
+		 * also obey the requirements from javadoc.
+		 */
 		fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
 			@Override
 			public int compare(Node node1,Node node2)
@@ -648,7 +731,7 @@ public class PuzzleSolver
 		});
 		
 		fringe.add(curr);
-		while(expanded.size()!=SEARCHLIMIT)
+		while(expanded.size()<SEARCHLIMIT)
 		{	
 			//avoid cycles: select a node from the fringe for expansion
 			//if it has not been expanded yet, expand it;else discard it
@@ -659,7 +742,7 @@ public class PuzzleSolver
 					return true;
 				curr = fringe.remove();
 				unvisited= true;
-				if (expanded.size()!=0)
+				if (!expanded.isEmpty())
 				{
 					for (Node n:expanded)
 					{	
@@ -694,7 +777,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(nodeNum++);
+						tmpNode.setID(nodeNum++);	//set Id for the node
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -708,7 +791,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(nodeNum++);
+						tmpNode.setID(nodeNum++);	//set Id for the node
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);		
@@ -725,7 +808,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(nodeNum++);
+						tmpNode.setID(nodeNum++);	//set Id for the node
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -739,7 +822,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(nodeNum++);
+						tmpNode.setID(nodeNum++);	//set Id for the node
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -756,7 +839,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(nodeNum++);
+						tmpNode.setID(nodeNum++);	//set Id for the node
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -770,7 +853,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setID(nodeNum++);
+						tmpNode.setID(nodeNum++);	//set Id for the node
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -793,6 +876,8 @@ public class PuzzleSolver
 		Node tmpNode;
 		Node curr = node;
 		nodeNum = 1;
+		
+		//pretty much the same as the one Greedy search uses
 		fringe = new PriorityQueue<Node>(11,new Comparator<Node>(){
 			@Override
 			public int compare(Node node1,Node node2)
@@ -813,7 +898,7 @@ public class PuzzleSolver
 		});
 		
 		fringe.add(curr);
-		while(expanded.size()!=SEARCHLIMIT)
+		while(expanded.size()<SEARCHLIMIT)
 		{	
 			//avoid cycles: select a node from the fringe for expansion
 			//if it has not been expanded yet, expand it;else discard it
@@ -824,7 +909,7 @@ public class PuzzleSolver
 					return true;
 				curr = fringe.remove();
 				unvisited= true;
-				if (expanded.size()!=0)
+				if (!expanded.isEmpty())
 				{
 					for (Node n:expanded)
 					{	
@@ -957,11 +1042,11 @@ public class PuzzleSolver
 		Number tmpNum;
 		Node curr = node;
 		Node neighbour = null;
-		Node minH =null;
+		Node minH =null;	//the only node that memory stores
 		
-		while(expanded.size()!=SEARCHLIMIT)
+		while(expanded.size()<SEARCHLIMIT)
 		{
-			if (expanded.size()!=0)
+			if (!expanded.isEmpty())
 			{
 				for (Node n:expanded)
 				{	
@@ -1140,9 +1225,11 @@ public class PuzzleSolver
 		u=	Math.max(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff)) -
 			Math.min(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff));
 		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff;
-		//TODO to be commented
+		
 		/*
-		 *
+		 *the current heuristic i use is the obvious one.
+		 *the commented out heuristic has an extra term and is improved to be more efficient than
+		 *the obvious one
 		 */
 		//h = firstDigitDiff + secondDigitDiff + thirdDigitDiff +(u>1?u:0);
 				
@@ -1192,10 +1279,10 @@ public class PuzzleSolver
 	 */
 	public void printExpanded()
 	{
-		while(expanded.size()!=0)
+		while(!expanded.isEmpty())
 		{
 			System.out.print(expanded.remove().getNumber().Value());
-			if (expanded.size()!=0)
+			if (!expanded.isEmpty())
 				System.out.print(",");
 		}
 	}

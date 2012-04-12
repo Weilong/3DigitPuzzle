@@ -9,7 +9,7 @@ package PuzzleSolver;
  */
 public class Number
 {
-	public enum Digit{NONE, FIRST, SECOND, THIRD};
+	public enum Digit{NONE, FIRST, SECOND, THIRD}; //an enum type variable to flag which digit is the last changed
 	private int firstDigit;
 	private int secondDigit;
 	private int thirdDigit;
