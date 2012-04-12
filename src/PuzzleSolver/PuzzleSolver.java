@@ -21,6 +21,7 @@ public class PuzzleSolver
 									 //when check cycle, the nodes from earlier round won't be checked.
 	private Stack<Node> path;
 	private SearchTree tree;
+	private int NodeNum =1;
 	
 	public PuzzleSolver(String filename)
 	{
@@ -439,7 +440,7 @@ public class PuzzleSolver
 				}
 			}			
 			
-			tmpExpanded.add(curr);//System.out.println(depth+":"+curr.getNumber().Value()+":"+expanded.size());
+			tmpExpanded.add(curr);
 			expanded.add(curr);
 			if (curr.getNumber().Value().equals(goal.Value()))
 			{
@@ -577,9 +578,9 @@ public class PuzzleSolver
 					return -1;
 				else
 				{
-					if (node1.timestamp()>node2.timestamp())
+					if (node1.ID()>node2.ID())
 						return -1;
-					if (node1.timestamp()<node2.timestamp())
+					if (node1.ID()<node2.ID())
 						return 1;
 					return 0;
 				}
@@ -633,7 +634,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -647,7 +648,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);		
@@ -664,7 +665,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -678,7 +679,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -695,7 +696,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -709,7 +710,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -735,9 +736,9 @@ public class PuzzleSolver
 					return -1;
 				else
 				{
-					if (node1.timestamp()>node2.timestamp())
+					if (node1.ID()>node2.ID())
 						return -1;
-					if (node1.timestamp()<node2.timestamp())
+					if (node1.ID()<node2.ID())
 						return 1;
 					return 0;
 				}
@@ -791,7 +792,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -805,7 +806,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);		
@@ -822,7 +823,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -836,7 +837,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -853,7 +854,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);
@@ -867,7 +868,7 @@ public class PuzzleSolver
 					if (!forbidden.contains(tmpNum.Value()))
 					{
 						tmpNode = new Node(tmpNum);
-						tmpNode.setTime(System.nanoTime());
+						tmpNode.setID(NodeNum++);
 						tmpNode.setParent(curr);
 						curr.getChildren().add(tmpNode);
 						fringe.add(tmpNode);

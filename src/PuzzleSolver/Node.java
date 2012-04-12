@@ -6,19 +6,19 @@ public class Node
 	private Node parent;
 	private Number number;
 	private ArrayList<Node> children = new ArrayList<Node>();
-	private long timestamp;
+	private int ID;
 	
 	public Node(Number number)
 	{
 		this.number = number;
 	}
-	public long timestamp()
+	public int ID()
 	{
-		return timestamp;
+		return ID;
 	}
-	public void setTime(long time)
+	public void setID(int ID)
 	{
-		this.timestamp = time;
+		this.ID = ID;
 	}
 	public Node parent()
 	{
