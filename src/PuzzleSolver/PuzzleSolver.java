@@ -172,7 +172,7 @@ public class PuzzleSolver
 	{
 		Number tmpNum;
 		Node tmpNode;
-		Node curr = null;
+		Node curr=null;
 		fringe.add(node);
 		//searching will stop when the number of expanded nodes hits the limit
 		while(expanded.size()<SEARCHLIMIT)
@@ -365,7 +365,7 @@ public class PuzzleSolver
 		Number tmpNum;
 		Node tmpNode;
 		Node curr = node;
-
+		
 		/*
 		 * avoid cycles: select a node from the fringe for expansion
 		 * if it has not been expanded yet, expand it;else discard it
@@ -506,7 +506,19 @@ public class PuzzleSolver
 				}
 			}
 		}
-		return false;
+		/*
+		 * there are two special cases: when the start number is 000 or 999,
+		 * there will be possiblity that they cannot move at all because of 
+		 * the forbidden numbers, say if forbidden numbers have 100,010,001,
+		 * then 000 cannot move at all,same for 999. so in these two cases
+		 * the only expanded node is the start node and we still wanna print
+		 * out the path and expanded list.therefore if this is the case, return
+		 * true,otherwise return false(depth limit reached)
+		 */
+		if(expanded.size()==1)
+			return true;
+		else
+			return false;
 	}
 	
 	/**
@@ -1285,15 +1297,5 @@ public class PuzzleSolver
 			if (!expanded.isEmpty())
 				System.out.print(",");
 		}
-	}
-	
-	/**
-	 * main method to run the program
-	 * @param args is used to pass test file and the chosen algorithm
-	 */
-	public static void main(String[] args)
-	{
-		PuzzleSolver solver = new PuzzleSolver(args[0]);
-		solver.solve(args[1].charAt(0));
 	}
 }
