@@ -380,7 +380,6 @@ public class PuzzleSolver
 				}
 			}
 		}				
-		
 		expanded.add(curr);
 		
 		if (curr.getNumber().Value().equals(goal.Value()))
@@ -1228,7 +1227,7 @@ public class PuzzleSolver
 	 * @param node is the one we want to calculate with
 	 * @return the heuristic value of the node;
 	 */
-	public int h(Node node)
+	public int h1(Node node)
 	{
 		int h,u;
 		int firstDigitDiff=Math.abs(node.getNumber().firstDigit()-goal.firstDigit()),
@@ -1237,15 +1236,32 @@ public class PuzzleSolver
 		u=	Math.max(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff)) -
 			Math.min(Math.max(firstDigitDiff, secondDigitDiff), Math.max(firstDigitDiff, thirdDigitDiff));
 		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff;
-		
 		/*
-		 *the current heuristic i use is the obvious one.
-		 *the commented out heuristic has an extra term and is improved to be more efficient than
-		 *the obvious one
+		 * the reason why i use (u>1?u:0) is that if u is equal to 0, we add 0 and if u is equal to 1, we still
+		 * add 0 because if u is 1 the most optimal way must alter the largest digit first so that this "1" will
+		 * not get factored out.eg if the start number is 224 and goal number is 111, we can decrease 4 by 1 first
+		 * so that 224->223->123->122->112->111, no useless steps, but if the start number is 225(u=2), 225->224->124->123
+		 * ->113->213->212->112->111.u can notice that 225 is only greater than 224 by 1, but it needs 2 more steps
+		 * including 1 "sacrifice" move
 		 */
-		//h = firstDigitDiff + secondDigitDiff + thirdDigitDiff +(u>1?u:0);
+		h = firstDigitDiff + secondDigitDiff + thirdDigitDiff +(u>1?u:0);
 				
 		return h;
+	}
+	
+	/**
+	 * Obvious heuristic
+	 * calculate the sum of the differences between digits respectively
+	 * @param node is the one we want to calculate with
+	 * @return the heuristic value of the node
+	 */
+	public int h(Node node)
+	{
+		int firstDigitDiff=Math.abs(node.getNumber().firstDigit()-goal.firstDigit()),
+			secondDigitDiff=Math.abs(node.getNumber().secondDigit()-goal.secondDigit()),
+			thirdDigitDiff=Math.abs(node.getNumber().thirdDigit()-goal.thirdDigit());
+				
+		return firstDigitDiff + secondDigitDiff + thirdDigitDiff;
 	}
 	
 	/**
