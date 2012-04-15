@@ -28,6 +28,7 @@ public class PuzzleSolver
 	private Queue<Node> fringe;
 	private Queue<Node>	expanded;
 	
+	
 	/*
 	 * tmpExpanded list is to store the expanded nodes in IDS in 
 	 * each round so that when check cycle, the nodes from earlier 
@@ -92,7 +93,7 @@ public class PuzzleSolver
 			{
 				printPath();
 				System.out.println();
-				printExpanded();	
+				printExpanded();			
 			}
 			else
 				System.out.print("Depth limit reached");					
@@ -102,7 +103,7 @@ public class PuzzleSolver
 			{
 				printPath();
 				System.out.println();
-				printExpanded();	
+				printExpanded();			
 			}
 			else
 				System.out.print("Depth limit reached");
@@ -1313,5 +1314,11 @@ public class PuzzleSolver
 			if (!expanded.isEmpty())
 				System.out.print(",");
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		PuzzleSolver solver = new PuzzleSolver(args[0]);
+		solver.solve(args[1].charAt(0));
 	}
 }
