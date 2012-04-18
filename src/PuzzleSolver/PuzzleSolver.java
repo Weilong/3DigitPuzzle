@@ -93,7 +93,8 @@ public class PuzzleSolver
 			{
 				printPath();
 				System.out.println();
-				printExpanded();			
+				printExpanded();
+				System.out.println();
 			}
 			else
 				System.out.print("Depth limit reached");					
@@ -103,7 +104,8 @@ public class PuzzleSolver
 			{
 				printPath();
 				System.out.println();
-				printExpanded();			
+				printExpanded();
+				System.out.println();
 			}
 			else
 				System.out.print("Depth limit reached");
@@ -113,7 +115,8 @@ public class PuzzleSolver
 			{
 				printPath();
 				System.out.println();
-				printExpanded();	
+				printExpanded();
+				System.out.println();
 			}
 			else
 				System.out.print("Depth limit reached");
@@ -123,7 +126,8 @@ public class PuzzleSolver
 			{
 				printPath();
 				System.out.println();
-				printExpanded();	
+				printExpanded();
+				System.out.println();
 			}
 			else
 				System.out.print("Depth limit reached");
@@ -133,7 +137,8 @@ public class PuzzleSolver
 			{
 				printPath();
 				System.out.println();
-				printExpanded();	
+				printExpanded();
+				System.out.println();
 			}
 			else
 				System.out.print("Depth limit reached");
@@ -158,6 +163,7 @@ public class PuzzleSolver
 			printPath();
 			System.out.println();
 			printExpanded();
+			System.out.println();
 			break;
 		default:
 		}
